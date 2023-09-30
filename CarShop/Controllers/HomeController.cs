@@ -1,5 +1,6 @@
 ﻿using CarShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CarShop.Controllers
@@ -107,11 +108,36 @@ namespace CarShop.Controllers
             },
         };
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    ViewBag.cars = cars;
+        //    return View();
+        //}
+
+        public async Task<IActionResult> Index(int delete = 0, int edit = 0)
         {
-            ViewBag.cars = cars;
-            return View();
+            if(delete != 0)
+            {
+                var car = await db.Cars.FindAsync(delete);
+
+                if(car != null)
+                {
+                    db.Cars.Remove(car);
+                    await db.SaveChangesAsync();
+                }                
+            }
+            else if (edit != 0)
+            {
+                var car = await db.Cars.FindAsync(edit);
+
+                if(car == null) return NotFound();
+
+                return View(car);
+            }
+
+            return View(await db.Cars.ToListAsync());
         }
+
         public IActionResult CarList()
         {
             ViewBag.cars = cars;
