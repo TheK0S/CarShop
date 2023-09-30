@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>lessons 3</title>
+	<link rel="stylesheet" href="/css/site.css" type="text/css" />
+</head>
+<body>
+	<h2>@ViewBag.Title</h2>
+	<div class="link_wrapper">
+		<a class="button" href="/Home/Index">Home</a>
+		<a class="button" href="/Home/CarList">Short list</a>
+		<a class="button" href="/Home/CarInfo">Large list</a>
+	</div>
+	<div class="container">
+		@RenderBody()
+	</div>
+
+</body>
+</html>

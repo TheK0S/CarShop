@@ -1,0 +1,14 @@
+﻿@{
+    var cars = ViewBag.cars;
+}
+
+<ul>
+    @foreach (var car in ViewBag.cars)
+    {
+        <li>
+            <h3>Name: @car.Name</h3>
+            <p>Price: @car.Price</p>
+            <p>@car.Title</p>
+        </li>
+    }
+</ul>
