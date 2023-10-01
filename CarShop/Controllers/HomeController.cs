@@ -116,26 +116,50 @@ namespace CarShop.Controllers
 
         public async Task<IActionResult> Index(int delete = 0, int edit = 0)
         {
-            if(delete != 0)
+            if (delete != 0)
             {
-                var car = await db.Cars.FindAsync(delete);
+                var user = await db.User.FindAsync(delete);
 
-                if(car != null)
+                if (user != null)
                 {
-                    db.Cars.Remove(car);
+                    db.User.Remove(user);
                     await db.SaveChangesAsync();
-                }                
+                }
             }
             else if (edit != 0)
             {
-                var car = await db.Cars.FindAsync(edit);
+                var user = await db.User.FindAsync(edit);
 
-                if(car == null) return NotFound();
+                if (user == null) return NotFound();
 
-                return View(car);
+                return View(user);
             }
 
-            return View(await db.Cars.ToListAsync());
+            return View(await db.User.ToListAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index([FromForm] User user)
+        {
+            if (user == null) return NotFound();
+
+            if (user.Id != 0)
+            {
+                var edit = await db.User.FindAsync(user.Id);
+                if (edit == null) return NotFound();
+                edit.UserName = user.UserName;
+                edit.Password = user.Password;
+                edit.Email = user.Email;
+                await db.SaveChangesAsync();
+            }
+            else
+            {
+                user.Created = DateTime.Now;
+                await db.User.AddAsync(user);
+                await db.SaveChangesAsync();
+            }
+
+            return LocalRedirect("/");
         }
 
         public IActionResult CarList()
