@@ -1,5 +1,6 @@
-﻿using CarShop.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using CarShop.Models;
 using System.Diagnostics;
 
 namespace CarShop.Controllers
@@ -8,9 +9,9 @@ namespace CarShop.Controllers
     {
         private readonly AppDbContext db;
 
-        public HomeController(AppDbContext db) { this.db = db; }
+        public HomeController(AppDbContext dbContext) { db = dbContext; }
 
-        List<Car> cars = new List<Car>
+        List<Car> cars = new()
         {
             new Car
             {
@@ -107,11 +108,60 @@ namespace CarShop.Controllers
             },
         };
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    ViewBag.cars = cars;
+        //    return View();
+        //}
+
+        public async Task<IActionResult> Index(int delete = 0, int edit = 0)
         {
-            ViewBag.cars = cars;
-            return View();
+            if (delete != 0)
+            {
+                var user = await db.User.FindAsync(delete);
+
+                if (user != null)
+                {
+                    db.User.Remove(user);
+                    await db.SaveChangesAsync();
+                }
+            }
+            else if (edit != 0)
+            {
+                var user = await db.User.FindAsync(edit);
+
+                if (user == null) return NotFound();
+
+                return View(user);
+            }
+
+            return View(await db.User.ToListAsync());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Index([FromForm] User user)
+        {
+            if (user == null) return NotFound();
+
+            if (user.Id != 0)
+            {
+                var edit = await db.User.FindAsync(user.Id);
+                if (edit == null) return NotFound();
+                edit.UserName = user.UserName;
+                edit.Password = user.Password;
+                edit.Email = user.Email;
+                await db.SaveChangesAsync();
+            }
+            else
+            {
+                user.Created = DateTime.Now;
+                await db.User.AddAsync(user);
+                await db.SaveChangesAsync();
+            }
+
+            return LocalRedirect("/");
+        }
+
         public IActionResult CarList()
         {
             ViewBag.cars = cars;
