@@ -1,14 +1,16 @@
-﻿@{
-    var cars = ViewBag.cars;
-}
+﻿
 
-<ul>
-    @foreach (var car in ViewBag.cars)
+<ul class="d-flex align-items-center justify-content-center text-center flex-wrap">
+    @foreach (var car in Model)
     {
-        <li>
-            <h3>Name: @car.Name</h3>
-            <p>Price: @car.Price</p>
-            <p>@car.Title</p>
+        <li class="col-xxl-4 col-lg-6 col-md-12 p-2">
+            <h3>@car.Name</h3>
+            <img src="@car.Url" alt="@car.Name">
+            <div class="text-start p-2">
+                <p>@car.Title</p>
+                <p>@car.Description</p>
+                <p>Price: @car.Price</p>
+            </div>
         </li>
     }
 </ul>

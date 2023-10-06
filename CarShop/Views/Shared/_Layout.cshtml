@@ -7,16 +7,45 @@
 	<link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" type="text/css" />
 	<link rel="stylesheet" href="/css/site.css" type="text/css" />
 </head>
-<body>
-	<h2>@ViewBag.Title</h2>
-	<div class="link_wrapper">
-		<a class="button" href="/Home/Index">Home</a>
-		<a class="button" href="/Home/CarList">Short list</a>
-		<a class="button" href="/Home/CarInfo">Large list</a>
-	</div>
-	<div class="container">
+<body class="bg-dark">
+	<header>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/Home/Index">Car shop</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Home/CarList">Car list</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Database management
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/Users">Users</a></li>
+                                <li><a class="dropdown-item" href="/Cars">Cars</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+		</nav>
+	</header>
+	<div class="container root">
 		@RenderBody()
 	</div>
+    <footer class="footer">
+
+    </footer>
 	<script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="/js/site.js"></script>
 </body>
