@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarShop.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserAndCarToDb : Migration
+    public partial class WorkMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

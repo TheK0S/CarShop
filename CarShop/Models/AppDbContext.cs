@@ -11,6 +11,6 @@ namespace CarShop.Models
         public DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=DESKTOP-K60TA32\\SQLEXPRESS;Database=CarShop;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
+            => options.UseSqlServer("Server=DESKTOP-HHO6PH0;Database=CarShop;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
     }
 }

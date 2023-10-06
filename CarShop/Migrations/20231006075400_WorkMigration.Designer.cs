@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShop.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231001121548_AddUserAndCarToDb")]
-    partial class AddUserAndCarToDb
+    [Migration("20231006075400_WorkMigration")]
+    partial class WorkMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,6 +1,6 @@
-﻿using CarShop.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CarShop.Models;
 using System.Diagnostics;
 
 namespace CarShop.Controllers
@@ -9,9 +9,9 @@ namespace CarShop.Controllers
     {
         private readonly AppDbContext db;
 
-        public HomeController(AppDbContext db) { this.db = db; }
+        public HomeController(AppDbContext dbContext) { db = dbContext; }
 
-        List<Car> cars = new List<Car>
+        List<Car> cars = new()
         {
             new Car
             {
