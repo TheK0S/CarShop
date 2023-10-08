@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarShop", "CarShop\CarShop.csproj", "{4036B04C-9BA9-4A48-B88D-9A06842BC2FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarShop", "CarShop\CarShop.csproj", "{4036B04C-9BA9-4A48-B88D-9A06842BC2FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarShopAPI", "CarShopAPI\CarShopAPI.csproj", "{2F190EBF-0D8D-4A62-AB6C-807E20AFB2CD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4036B04C-9BA9-4A48-B88D-9A06842BC2FE} = {4036B04C-9BA9-4A48-B88D-9A06842BC2FE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{4036B04C-9BA9-4A48-B88D-9A06842BC2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4036B04C-9BA9-4A48-B88D-9A06842BC2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4036B04C-9BA9-4A48-B88D-9A06842BC2FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F190EBF-0D8D-4A62-AB6C-807E20AFB2CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F190EBF-0D8D-4A62-AB6C-807E20AFB2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F190EBF-0D8D-4A62-AB6C-807E20AFB2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F190EBF-0D8D-4A62-AB6C-807E20AFB2CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
