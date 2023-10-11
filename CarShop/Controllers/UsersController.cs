@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop.Models;
+using Newtonsoft.Json;
 
 namespace CarShop.Controllers
 {
@@ -21,9 +22,13 @@ namespace CarShop.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-              return _context.User != null ? 
-                          View(await _context.User.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.User'  is null.");
+            var response = await Api.GetApiResponse("user");
+
+            string jsonContent = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<IEnumerable<User>>(jsonContent);
+
+            return View(result);
         }
 
         // GET: Users/Details/5

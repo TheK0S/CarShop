@@ -9,6 +9,6 @@ namespace CarShopAPI.Models
         public DbSet<User> User { get; set; }
         public DbSet<Category> Category { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=DESKTOP-K60TA32\\SQLEXPRESS;Database=CarShopAPI;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
+            => options.UseSqlServer("Server=DESKTOP-HHO6PH0;Database=CarShopAPI;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
     }
 }

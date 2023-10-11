@@ -19,7 +19,7 @@ namespace CarShopAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            if(_db.Category == null) return NotFound();
+            if (_db.Category == null) return NotFound();
 
             return await _db.Category.ToListAsync();
         }
@@ -37,13 +37,13 @@ namespace CarShopAPI.Controllers
             return Ok(category);
         }
 
-        //PUT: api/cars/id
+        //PUT: api/category/id
         [HttpPut("id")]
-        public async Task<IActionResult> PutCategory(int id, Car car)
+        public async Task<IActionResult> PutCategory(int id, Category category)
         {
-            if(id != car.Id) return BadRequest();
+            if (id != category.Id) return BadRequest();
 
-            _db.Entry(car).State = EntityState.Modified;
+            _db.Entry(category).State = EntityState.Modified;
 
             try
             {
@@ -64,8 +64,39 @@ namespace CarShopAPI.Controllers
             return NoContent();
         }
 
+        //POST: api/category/id
+        [HttpPost]
+        public async Task<ActionResult<Category>> PostCategory(Category category)
+        {
+            if (_db.Category == null)
+            {
+                return Problem("Entity set 'CarShopDbContext.Car'  is null.");
+            }
+            _db.Category.Add(category);
+            await _db.SaveChangesAsync();
 
+            return CreatedAtAction("GetCar", new { id = category.Id }, category);
+        }
 
+        // DELETE: api/category/id
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            if (_db.Category == null)
+            {
+                return NotFound();
+            }
+            var category = await _db.Category.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            _db.Category.Remove(category);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         private bool CategoryExists(int id)
         {
