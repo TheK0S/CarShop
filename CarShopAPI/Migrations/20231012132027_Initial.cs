@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarShopAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialAPI : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +34,8 @@ namespace CarShopAPI.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccessLevel = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +55,7 @@ namespace CarShopAPI.Migrations
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<long>(type: "bigint", nullable: false),
                     IsFavourite = table.Column<bool>(type: "bit", nullable: false),
-                    IsLockedAvailable = table.Column<long>(type: "bigint", nullable: false),
+                    Count = table.Column<long>(type: "bigint", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

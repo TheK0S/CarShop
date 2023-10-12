@@ -2,16 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using CarShop.Models;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace CarShop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly AppDbContext db;
-
-        public HomeController(AppDbContext dbContext) { db = dbContext; }
-
-
         public IActionResult Index()
         {
             return View();
@@ -19,9 +15,13 @@ namespace CarShop.Controllers
 
         public async Task<IActionResult> CarList()
         {
-            return db.Car != null ?
-                          View(await db.Car.ToListAsync()) :
-                          Problem("Entity set 'AppDbContext.Car'  is null.");
+            var response = await Api.GetApiResponse("car");
+
+            string jsonContent = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<IEnumerable<Car>>(jsonContent);
+
+            return View(result ?? new List<Car>());
         }
         public IActionResult CarInfo()
         {

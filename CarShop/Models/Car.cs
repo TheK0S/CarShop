@@ -6,20 +6,15 @@ namespace CarShop.Models
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Description { get; set; }
-
-        [Required]
-        public string Title { get; set; }
-
-        [Required]
-        public string Url { get; set; }
-
-        [Required]
-        public int Price { get; set; }
+        public string? Name { get; set; }
+        public string? ShortDesc { get; set; }
+        public string? LongDesc { get; set; }
+        public string? Title { get; set; }
+        public string? Url { get; set; }
+        public uint Price { get; set; } = 0;
+        public bool IsFavourite { get; set; } = false;
+        public uint Count { get; set; } = 0;
+        public virtual Category? Category { get; set; }
     }
 }

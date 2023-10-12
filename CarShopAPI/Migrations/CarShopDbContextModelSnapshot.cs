@@ -33,11 +33,11 @@ namespace CarShopAPI.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<long>("Count")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("IsFavourite")
                         .HasColumnType("bit");
-
-                    b.Property<long>("IsLockedAvailable")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("LongDesc")
                         .HasColumnType("nvarchar(max)");
@@ -91,6 +91,9 @@ namespace CarShopAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessLevel")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
