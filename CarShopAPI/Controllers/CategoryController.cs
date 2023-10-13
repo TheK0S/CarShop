@@ -15,7 +15,7 @@ namespace CarShopAPI.Controllers
             _db = context;
         }
 
-        //GET: api/cars
+        //GET: api/category
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
@@ -24,7 +24,7 @@ namespace CarShopAPI.Controllers
             return await _db.Category.ToListAsync();
         }
 
-        //GET: api/cars/id
+        //GET: api/category/id
         [HttpGet("id")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
@@ -34,7 +34,7 @@ namespace CarShopAPI.Controllers
 
             if (category == null) return NotFound();
 
-            return Ok(category);
+            return category;
         }
 
         //PUT: api/category/id
@@ -64,7 +64,7 @@ namespace CarShopAPI.Controllers
             return NoContent();
         }
 
-        //POST: api/category/id
+        //POST: api/category
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {

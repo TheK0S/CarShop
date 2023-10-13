@@ -15,13 +15,9 @@ namespace CarShop.Controllers
 
         public async Task<IActionResult> CarList()
         {
-            var response = await Api.GetApiResponse("car");
+            //var response = await Api.GetApiResponse("car");
 
-            string jsonContent = await response.Content.ReadAsStringAsync();
-
-            var result = JsonConvert.DeserializeObject<IEnumerable<Car>>(jsonContent);
-
-            return View(result ?? new List<Car>());
+            return View(new List<Car>());
         }
         public IActionResult CarInfo()
         {
