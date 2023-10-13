@@ -15,9 +15,9 @@ namespace CarShop.Controllers
 
         public async Task<IActionResult> CarList()
         {
-            //var response = await Api.GetApiResponse("car");
+            HttpClient httpClient = new();
 
-            return View(new List<Car>());
+            return View(await httpClient.GetFromJsonAsync<IEnumerable<Car>>($"{Api.apiUri}cars"));
         }
         public IActionResult CarInfo()
         {

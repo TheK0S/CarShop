@@ -25,7 +25,7 @@ namespace CarShopAPI.Controllers
         }
 
         //GET: api/category/id
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
             if (_db.Category == null) return NotFound();
@@ -38,7 +38,7 @@ namespace CarShopAPI.Controllers
         }
 
         //PUT: api/category/id
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.Id) return BadRequest();

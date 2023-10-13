@@ -49,6 +49,20 @@ namespace CarShopAPI.Controllers
             return car;
         }
 
+        //[HttpPost]
+        //public async Task<ActionResult<Car>> PostCar([Bind("Name,ShortDesc,LongDesc,Title,Url,Price,IsFavourite,Count")] Car car)
+        //{
+        //    if (_db.Car == null)
+        //    {
+        //        return Problem("Entity set 'CarShopDbContext.User'  is null.");
+        //    }
+
+        //    _db.Car.Add(car);
+        //    await _db.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetCar", new { id = car.Id }, car);
+        //}
+
         // PUT: api/Cars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -77,7 +91,7 @@ namespace CarShopAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Cars

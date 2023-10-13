@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<CarShop.Models.Car>
 
 <ul class="d-flex text-center flex-wrap">
     @foreach (var car in Model)
@@ -8,7 +8,7 @@
             <div class="text-start p-2">
                 <h3>@car.Name</h3>
                 <p>@car.Title</p>
-                <p>@car.Description</p>
+                <p>@car.ShortDesc</p>
                 <p>Price: @car.Price</p>
             </div>
         </li>

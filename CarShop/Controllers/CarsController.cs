@@ -7,38 +7,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop.Models;
 using System.Runtime.ConstrainedExecution;
+using System.Net;
 
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
     {
+        private readonly HttpClient httpClient = new HttpClient();
+
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            return View();
-                
-                //_context.Car != null ? 
-                //          View(await _context.Car.ToListAsync()) :
-                //          Problem("Entity set 'AppDbContext.Car'  is null.");
+            return View(await httpClient.GetFromJsonAsync<IEnumerable<Car>>($"{Api.apiUri}cars"));
         }
 
         // GET: Cars/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            //if (id == null || _context.Car == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null)
+                return NotFound();
 
-            //var car = await _context.Car
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            //if (car == null)
-            //{
-            //    return NotFound();
-            //}
+            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            if (car == null)
+                return NotFound();
 
-            //return View(car);
-            return View();
+            return View(car);
         }
 
         // GET: Cars/Create
@@ -54,105 +47,78 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Title,Url,Price")] Car car)
         {
-            if (ModelState.IsValid)
-            {
-                //_context.Add(car);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-            }
-            return View(car);
+            if (!ModelState.IsValid)
+                return View(car);
+
+            await httpClient.PostAsJsonAsync($"{Api.apiUri}cars", car);
+            if (car == null)
+                return Problem("Something happened wrong");
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Cars/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            //if (id == null || _context.Car == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null)
+                return NotFound();
 
-            //var car = await _context.Car.FindAsync(id);
-            //if (car == null)
-            //{
-            //    return NotFound();
-            //}
-            //return View(car);
-            return View();
+            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            if (car == null)
+                return NotFound();
+
+            return View(car);
         }
 
         // POST: Cars/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // To protect from overposting attacks, enable the specific properties you want to bind to. [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price,IsFavourite,Count")]
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Title,Url,Price")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price")] Car car)
         {
-            //if (id != car.Id)
-            //{
-            //    return NotFound();
-            //}
+            if (id != car.Id)
+                return NotFound();
 
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(car);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!CarExists(car.Id))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //return View(car);
-            return View();
+            if (!ModelState.IsValid)
+                return View(car);
+
+            var response = await httpClient.PutAsJsonAsync($"{Api.apiUri}cars/{id}", car);
+
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction(nameof(Index));
+
+            return View(car);
         }
 
         // GET: Cars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            //if (id == null || _context.Car == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null)
+                return NotFound();
 
-            //var car = await _context.Car
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            //if (car == null)
-            //{
-            //    return NotFound();
-            //}
+            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
 
-            //return View(car);
-            return View();
+            if (car == null)
+                return NotFound();
+
+            return View(car);
         }
 
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            //if (_context.Car == null)
-            //{
-            //    return Problem("Entity set 'AppDbContext.Car'  is null.");
-            //}
-            //var car = await _context.Car.FindAsync(id);
-            //if (car != null)
-            //{
-            //    _context.Car.Remove(car);
-            //}
+            if (id == null)
+                return NotFound();
 
-            //await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
-            return View();
+            var car = await httpClient.DeleteAsync($"{Api.apiUri}cars/{id}");
+
+            if (car == null)
+                return NotFound();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
