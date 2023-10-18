@@ -35,8 +35,16 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var categories = await httpClient.GetFromJsonAsync<IEnumerable<Category>>($"{Api.apiUri}category");
+            var categoriesDictionary = new Dictionary<int, string>();
+            if (categories != null)
+                foreach (var category in categories)
+                    categoriesDictionary.Add(category.Id, category.Name ?? "no name");
+
+            ViewBag.Categories = categoriesDictionary;
+
             return View();
         }
 
@@ -45,7 +53,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Title,Url,Price")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Name,LongDesc,ShortDesc,Title,Url,Price,IsFavourite,Count, Category")] Car car)
         {
             if (!ModelState.IsValid)
                 return View(car);

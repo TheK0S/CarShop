@@ -1,43 +1,50 @@
 ﻿@model CarShop.Models.Car
+
 @{
-    Dictionary<int,string> categories = ViewBag.Categories;
+    //ViewData["Title"] = "Create";
 }
 
-<h1 class="text-center">Create car</h1>
+<h1>Create</h1>
 
+<h4>Car</h4>
 <hr />
-<div class="row justify-content-center">
+<div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control mb-2" />
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ShortDesc" class="control-label"></label>
-                <input asp-for="ShortDesc" class="form-control mb-2" />
+                <input asp-for="ShortDesc" class="form-control" />
                 <span asp-validation-for="ShortDesc" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LongDesc" class="control-label"></label>
-                <input asp-for="LongDesc" class="form-control mb-2" />
+                <input asp-for="LongDesc" class="form-control" />
                 <span asp-validation-for="LongDesc" class="text-danger"></span>
-            </div>            
+            </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control mb-2" />
+                <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Url" class="control-label"></label>
-                <input asp-for="Url" class="form-control mb-2" />
+                <input asp-for="Url" class="form-control" />
                 <span asp-validation-for="Url" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control mb-2" />
+                <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -47,30 +54,16 @@
             </div>
             <div class="form-group">
                 <label asp-for="Count" class="control-label"></label>
-                <input asp-for="Count" class="form-control mb-2" />
+                <input asp-for="Count" class="form-control" />
                 <span asp-validation-for="Count" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <select asp-for="Category" class="form-control mb-2">
-                    @foreach (var category in categories)
-                    {
-                        <option value="@category.Key">@category.Value</option>
-                    }
-                </select>
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3">
-                <input type="submit" value="Create" class="btn btn-primary w-100" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
-
-@*@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}*@

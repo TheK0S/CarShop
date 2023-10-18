@@ -9,8 +9,8 @@ namespace CarShopAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly CarShopDbContext _db;
-        public CategoryController(CarShopDbContext context)
+        private readonly AppDbContext _db;
+        public CategoryController(AppDbContext context)
         {
             _db = context;
         }

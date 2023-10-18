@@ -13,9 +13,9 @@ namespace CarShopAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly CarShopDbContext _context;
+        private readonly AppDbContext _context;
 
-        public UserController(CarShopDbContext context)
+        public UserController(AppDbContext context)
         {
             _context = context;
         }

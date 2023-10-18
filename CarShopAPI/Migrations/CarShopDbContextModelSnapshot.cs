@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarShopAPI.Migrations
 {
-    [DbContext(typeof(CarShopDbContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class CarShopDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

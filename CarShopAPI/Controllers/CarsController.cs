@@ -97,13 +97,14 @@ namespace CarShopAPI.Controllers
         // POST: api/Cars
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Car>> PostCar(Car car)
+        public async Task<ActionResult<Car>> PostCar([FromBody] Car car)
         {
           if (_db.Car == null)
           {
               return Problem("Entity set 'CarShopDbContext.Car'  is null.");
           }
-            _db.Car.Add(car);
+
+            //car.Category = await _db.Category.FindAsync(car.Category.Id);
             await _db.SaveChangesAsync();
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);
