@@ -1,0 +1,18 @@
+﻿@model Car
+@{
+    ViewData["Title"] = "CarDetails";
+}
+
+<h1 class="text-center text-uppercase mb-5">@Model.Name</h1>
+<div class="container-xxl">
+    <div class="row">
+        <img src="@Model.Url" alt="@Model.Name" class="col-md-6 col-sm-12 col-xs-12" />
+        <div class="offset-md-1 col-md-5 col-sm-12 col-xs-12">
+            <p>@Model.Title</p>
+            <p>Car price: @Model.Price</p>
+            <a href="#" class="btn btn-primary">Buy car</a>
+        </div>
+        <p class="mt-3">@Model.LongDesc</p>
+    </div>
+</div>
+

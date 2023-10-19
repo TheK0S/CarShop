@@ -13,9 +13,9 @@ namespace CarShopAPI.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly CarShopDbContext _db;
+        private readonly AppDbContext _db;
 
-        public CarsController(CarShopDbContext context)
+        public CarsController(AppDbContext context)
         {
             _db = context;
         }
@@ -29,6 +29,20 @@ namespace CarShopAPI.Controllers
               return NotFound();
           }
             return await _db.Car.ToListAsync();
+        }
+
+        // GET: api/Cars/Favourite
+        [HttpGet("Favourite")]
+        public async Task<ActionResult<IEnumerable<Car>>> GetFavouriteCars()
+        {
+            if (_db.Car == null)
+            {
+                return NotFound();
+            }
+
+            var cars = await _db.Car.ToListAsync();
+
+            return cars.Where(c => c.IsFavourite == true).ToList();
         }
 
         // GET: api/Cars/5
@@ -104,7 +118,7 @@ namespace CarShopAPI.Controllers
               return Problem("Entity set 'CarShopDbContext.Car'  is null.");
           }
 
-            //car.Category = await _db.Category.FindAsync(car.Category.Id);
+            await _db.Car.AddAsync(car);
             await _db.SaveChangesAsync();
 
             return CreatedAtAction("GetCar", new { id = car.Id }, car);

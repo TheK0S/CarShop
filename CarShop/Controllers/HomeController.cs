@@ -8,20 +8,15 @@ namespace CarShop.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly HttpClient httpClient = new HttpClient();
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await httpClient.GetFromJsonAsync<IEnumerable<Car>>($"{Api.apiUri}cars/favourite"));
         }
 
         public async Task<IActionResult> CarList()
         {
-            HttpClient httpClient = new();
-
             return View(await httpClient.GetFromJsonAsync<IEnumerable<Car>>($"{Api.apiUri}cars"));
-        }
-        public IActionResult CarInfo()
-        {
-            return View();
         }
     }
 }

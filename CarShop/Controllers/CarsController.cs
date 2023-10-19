@@ -34,6 +34,19 @@ namespace CarShop.Controllers
             return View(car);
         }
 
+        // GET: Cars/CarDetails/5
+        public async Task<IActionResult> CarDetails(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            if (car == null)
+                return NotFound();
+
+            return View(car);
+        }
+
         // GET: Cars/Create
         public async Task<IActionResult> Create()
         {
@@ -53,7 +66,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LongDesc,ShortDesc,Title,Url,Price,IsFavourite,Count, Category")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Name,LongDesc,ShortDesc,Title,Url,Price,IsFavourite,Count, CategoryId")] Car car)
         {
             if (!ModelState.IsValid)
                 return View(car);
@@ -75,15 +88,23 @@ namespace CarShop.Controllers
             if (car == null)
                 return NotFound();
 
+            var categories = await httpClient.GetFromJsonAsync<IEnumerable<Category>>($"{Api.apiUri}category");
+            var categoriesDictionary = new Dictionary<int, string>();
+            if (categories != null)
+                foreach (var category in categories)
+                    categoriesDictionary.Add(category.Id, category.Name ?? "no name");
+
+            ViewBag.Categories = categoriesDictionary;
+
             return View(car);
         }
 
         // POST: Cars/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to. [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price,IsFavourite,Count")]
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.  [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price,CategoryId")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LongDesc,ShortDesc,Title,Url,Price,IsFavourite,Count, CategoryId")] Car car)
         {
             if (id != car.Id)
                 return NotFound();

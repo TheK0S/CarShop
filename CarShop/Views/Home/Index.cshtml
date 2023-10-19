@@ -1,40 +1,17 @@
-﻿@{
+﻿@model IEnumerable<Car>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome to the home page of cars list app</h1>
-    <p>We have cars for you</p>
-    @if(Model is IEnumerable<User>)
-    {
-        <div class="text-left">
-            @foreach (var user in Model)
+    <h1>Welcome to the car shop</h1>    
+    <section class="mt-3 mb-3">
+        <h2 class="text-start">Top sale cars</h2>
+        <div>
+            @foreach (Car car in Model)
             {
-                <ul>
-                    <li>@user.UserName</li>
-                    <li>@user.Email</li>
-                    <li>@user.Id</li>
-                    <li>@user.Created</li>
-                    <li><a href="/?delete=@user.Id">(delete)</a></li>
-                    <li><a href="/?edit=@user.Id">(edit)</a></li>
-                </ul>
+                await Html.RenderPartialAsync("_CarCard",car);
             }
         </div>
-        <form method="post">
-            <input type="text" name="Username" placeholder="Username" /> <br />
-            <input type="password" name="Password" placeholder="Password" /> <br />
-            <input type="text" name="Email" placeholder="Email" /> <br />
-            <button>Add User</button>
-        </form>
-    }
-    else if(Model is User)
-    {
-        <form method="post">
-            <input type="hidden" name="Id" placeholder="@Model.Id" /> <br />
-            <input type="text" name="Username" placeholder="Username" value="@Model.UserName" /> <br />
-            <input type="password" name="Password" placeholder="Password" value="@Model.Password" /> <br />
-            <input type="text" name="Email" placeholder="Email" value="@Model.Email" /> <br />
-            <button>Edit User</button>
-        </form>
-    }
+    </section>
 </div>

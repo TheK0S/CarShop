@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShopAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231012132027_Initial")]
+    [Migration("20231018124524_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,7 +33,7 @@ namespace CarShopAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<long>("Count")
@@ -87,6 +87,31 @@ namespace CarShopAPI.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("CarShopAPI.Models.ShopCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ShopCartId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("ShopCartItem");
+                });
+
             modelBuilder.Entity("CarShopAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -122,9 +147,22 @@ namespace CarShopAPI.Migrations
                 {
                     b.HasOne("CarShopAPI.Models.Category", "Category")
                         .WithMany("Cars")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("CarShopAPI.Models.ShopCartItem", b =>
+                {
+                    b.HasOne("CarShopAPI.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("CarShopAPI.Models.Category", b =>

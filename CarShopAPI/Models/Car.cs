@@ -15,7 +15,7 @@ namespace CarShopAPI.Models
         public uint Price { get; set; } = 0;
         public bool IsFavourite { get; set; } = false;
         public uint Count { get; set; } = 0;
-        public uint CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public virtual Category? Category { get; set; }
     }
 }

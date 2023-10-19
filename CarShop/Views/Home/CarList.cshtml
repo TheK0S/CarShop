@@ -1,16 +1,8 @@
 ﻿@model IEnumerable<CarShop.Models.Car>
 
-<ul class="d-flex text-center flex-wrap">
+<div class="d-flex text-center flex-wrap">
     @foreach (var car in Model)
     {
-        <li class="col-xxl-4 col-lg-6 col-md-12 p-2">
-            <img src="@car.Url" alt="@car.Name">
-            <div class="text-start p-2">
-                <h3>@car.Name</h3>
-                <p>@car.Title</p>
-                <p>@car.ShortDesc</p>
-                <p>Price: @car.Price</p>
-            </div>
-        </li>
+        await Html.RenderPartialAsync("_CarCard",car);
     }
-</ul>
+</div>

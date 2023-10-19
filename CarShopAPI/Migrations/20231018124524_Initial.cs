@@ -56,7 +56,7 @@ namespace CarShopAPI.Migrations
                     Price = table.Column<long>(type: "bigint", nullable: false),
                     IsFavourite = table.Column<bool>(type: "bit", nullable: false),
                     Count = table.Column<long>(type: "bigint", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,23 +65,53 @@ namespace CarShopAPI.Migrations
                         name: "FK_Car_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShopCartItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<long>(type: "bigint", nullable: false),
+                    ShopCartId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShopCartItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShopCartItem_Car_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Car",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Car_CategoryId",
                 table: "Car",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShopCartItem_CarId",
+                table: "ShopCartItem",
+                column: "CarId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "ShopCartItem");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Car");
 
             migrationBuilder.DropTable(
                 name: "Category");
