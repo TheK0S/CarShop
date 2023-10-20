@@ -29,6 +29,23 @@ a {
     min-width: 100px;
 }
 
+.car-img{
+    object-fit:cover;
+    height:24vw;
+}
+
+@media (max-width: 767.98px) {
+    .car-img {
+        height: 40vw;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .car-img {
+        height: 50vw;
+    }
+}
+
 img {
     width: 400px;
     height: 220px;

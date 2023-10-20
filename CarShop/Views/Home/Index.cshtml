@@ -7,8 +7,8 @@
 <div class="text-center">
     <h1 class="mb-5">Welcome to the car shop</h1>    
     <section class="mb-5">
-        <h2 class="text-start">TOP SALE CARS</h2>
-        <div id="carouseTopSale" class="carousel carousel-dark slide">
+        <h2 class="text-start px-3">TOP SALE CARS</h2>
+        <div id="carouseTopSale" class="carousel carousel-dark slide px-3">
             <div class="carousel-indicators">
                 @for (int i = 0; i < Model.TopSaleCars?.Count(); i++)
                 {
@@ -45,7 +45,7 @@
         </div>
     </section>
     <section class="mb-5">
-        <h2 class="text-start">SALE</h2>
+        <h2 class="text-start px-3">SALE</h2>
         <div class="d-flex text-center flex-wrap">
             @if(Model.DiscountCars?.Count() > 0)
             {

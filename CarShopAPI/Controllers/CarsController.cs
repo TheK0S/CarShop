@@ -33,16 +33,16 @@ namespace CarShopAPI.Controllers
 
         // GET: api/Cars/Favourite
         [HttpGet("Favourite")]
-        public async Task<ActionResult<IEnumerable<Car>>> GetFavouriteCars()
+        public async Task<ActionResult<List<Car>>> GetFavouriteCars()
         {
             if (_db.Car == null)
             {
                 return NotFound();
             }
 
-            var cars = await _db.Car.ToListAsync();
+            List<Car> cars = await _db.Car.ToListAsync();
 
-            return cars.Where(c => c.IsFavourite == true).ToList();
+            return cars.Where(c => c.IsFavourite == true).ToList() ?? new List<Car>();
         }
 
         // GET: api/Cars/5
