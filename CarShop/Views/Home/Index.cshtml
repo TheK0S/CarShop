@@ -5,8 +5,8 @@
 }
 
 <div class="text-center">
-    <h1>Welcome to the car shop</h1>    
-    <section class="mt-3 mb-3">
+    <h1 class="mb-5">Welcome to the car shop</h1>    
+    <section class="mb-5">
         <h2 class="text-start">TOP SALE CARS</h2>
         <div id="carouseTopSale" class="carousel carousel-dark slide">
             <div class="carousel-indicators">
@@ -27,7 +27,7 @@
                             <div class="carousel-caption d-none d-md-block bg-dark text-white bg-opacity-50 rounded-3">
                                 <h5>@car.Name</h5>
                                 <p>@car.ShortDesc</p>
-                                <a asp-controller="Cars" asp-action="CarDetails" asp-route-id="@car.Id" class="btn btn-primary">More details</a>
+                                <a asp-controller="Cars" asp-action="CarDetails" asp-route-id="@car.Id" class="btn btn-secondary mb-4">More details</a>
                             </div>
                         </div>
                         activeOrEmpty = "";
@@ -44,7 +44,7 @@
             </button>
         </div>
     </section>
-    <section class="mt-3 mb-3">
+    <section class="mb-5">
         <h2 class="text-start">SALE</h2>
         <div class="d-flex text-center flex-wrap">
             @if(Model.DiscountCars?.Count() > 0)
