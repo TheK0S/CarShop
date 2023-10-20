@@ -1,7 +1,5 @@
-﻿@model CarShop.Models.Car
-@{
-    Dictionary<int, string> categories = ViewBag.Categories;
-}
+﻿@using CarShop.Components;
+@model CarShop.Models.Car
 
 <h1 class="text-center">Edit car</h1>
 
@@ -55,17 +53,7 @@
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control mb-2">
-                    @foreach (var category in categories)
-                    {
-                        if(category.Key == Model.CategoryId)
-                        {
-                            <option value="@category.Key" selected>@category.Value</option>
-                        }
-                        else
-                        {
-                            <option value="@category.Key">@category.Value</option>
-                        }                        
-                    }
+                    @await Component.InvokeAsync(nameof(CategoryOptions), Model.CategoryId)
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>

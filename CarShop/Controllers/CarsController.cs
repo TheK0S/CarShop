@@ -48,16 +48,8 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var categories = await httpClient.GetFromJsonAsync<IEnumerable<Category>>($"{Api.apiUri}category");
-            var categoriesDictionary = new Dictionary<int, string>();
-            if (categories != null)
-                foreach (var category in categories)
-                    categoriesDictionary.Add(category.Id, category.Name ?? "no name");
-
-            ViewBag.Categories = categoriesDictionary;
-
             return View();
         }
 
@@ -87,14 +79,6 @@ namespace CarShop.Controllers
             var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
             if (car == null)
                 return NotFound();
-
-            var categories = await httpClient.GetFromJsonAsync<IEnumerable<Category>>($"{Api.apiUri}category");
-            var categoriesDictionary = new Dictionary<int, string>();
-            if (categories != null)
-                foreach (var category in categories)
-                    categoriesDictionary.Add(category.Id, category.Name ?? "no name");
-
-            ViewBag.Categories = categoriesDictionary;
 
             return View(car);
         }

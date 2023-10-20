@@ -6,7 +6,7 @@
         <h3 class="text-center">@Model.Name</h3>
         <p>@Model.Title</p>
         <p>@Model.ShortDesc</p>
-        <p>Price: @Model.Price $</p>
+        <p>Price: $ @Model.Price</p>
         <a asp-controller="Cars" asp-action="CarDetails" asp-route-id="@Model.Id" class="btn btn-info text-center">More details</a>
     </div>
 </div>

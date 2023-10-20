@@ -1,0 +1,15 @@
+﻿@model CategoryOptionsViewModel
+
+@foreach (var category in Model.Categories)
+{
+    if(category.Id == Model.SelectedCategoryId)
+    {
+        <option value="@category.Id" selected>@category.Name</option>
+    }
+    else
+    {
+        <option value="@category.Id">@category.Name</option>
+    }
+
+}
+

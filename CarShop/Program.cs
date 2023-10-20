@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Configuration.AddJsonFile("appsettings.json");
 
+builder.Services.AddTransient<CategoryService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
