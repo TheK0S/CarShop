@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarShop.Models;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace CarShop.Controllers
 {
@@ -45,8 +46,17 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,Password,Email,AccessLevel")] User user)
+        public async Task<IActionResult> Create([Bind("Id,UserName,Password,Email,RoleId")] User user)
         {
+            if (string.IsNullOrEmpty(user.UserName))
+                ModelState.AddModelError(nameof(user.UserName), "Enter User name");
+
+            if (string.IsNullOrEmpty(user.Password) || !Regex.IsMatch(user.Password, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$"))
+                ModelState.AddModelError(nameof(user.Password), "Password is too easy");
+
+            if (string.IsNullOrEmpty(user.Email) || !Regex.IsMatch(user.Email, @"^[A-Za-z0-9\.\-_]+@[A-Za-z0-9\.\-_]+\.\w+$"))
+                ModelState.AddModelError(nameof(user.Email), "Email is not valid");
+
             if (ModelState.IsValid)
             {
                 //string apiUrl = $"user?id=0&UserName={user.UserName}&Password={user.Password}&Email={user.Email}&AccessLevel={user.AccessLevel}"; 

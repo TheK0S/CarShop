@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CarShopAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitCarShop : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,7 @@ namespace CarShopAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -26,20 +26,16 @@ namespace CarShopAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Role",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccessLevel = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +61,29 @@ namespace CarShopAPI.Migrations
                         name: "FK_Car_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -99,6 +118,11 @@ namespace CarShopAPI.Migrations
                 name: "IX_ShopCartItem_CarId",
                 table: "ShopCartItem",
                 column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_RoleId",
+                table: "User",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -112,6 +136,9 @@ namespace CarShopAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Car");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Category");

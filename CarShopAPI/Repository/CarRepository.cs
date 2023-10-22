@@ -8,7 +8,10 @@ namespace CarShopAPI.Repository
     public class CarRepository : ICars
     {
         private readonly AppDbContext _db;
-        public CarRepository() { }        
+        public CarRepository(AppDbContext db) 
+        {
+            _db = db;
+        }        
 
         public async Task<Car> GetCar(int id)
         {

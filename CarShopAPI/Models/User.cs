@@ -13,6 +13,7 @@ namespace CarShopAPI.Models
         [Required]
         public string Email { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
-        public int AccessLevel { get; set; } = 2;
+        public int RoleId { get; set; } = 2;
+        public virtual Role? Role { get; set; }
     }
 }

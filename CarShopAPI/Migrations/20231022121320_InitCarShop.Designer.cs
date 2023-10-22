@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarShopAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231018124524_Initial")]
-    partial class Initial
+    [Migration("20231022121320_InitCarShop")]
+    partial class InitCarShop
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,11 +80,29 @@ namespace CarShopAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("CarShopAPI.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("CarShopAPI.Models.ShopCartItem", b =>
@@ -120,9 +138,6 @@ namespace CarShopAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccessLevel")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -134,11 +149,16 @@ namespace CarShopAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -146,7 +166,7 @@ namespace CarShopAPI.Migrations
             modelBuilder.Entity("CarShopAPI.Models.Car", b =>
                 {
                     b.HasOne("CarShopAPI.Models.Category", "Category")
-                        .WithMany("Cars")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -165,9 +185,15 @@ namespace CarShopAPI.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("CarShopAPI.Models.Category", b =>
+            modelBuilder.Entity("CarShopAPI.Models.User", b =>
                 {
-                    b.Navigation("Cars");
+                    b.HasOne("CarShopAPI.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

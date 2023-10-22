@@ -59,3 +59,7 @@ img {
     img:hover {
         box-shadow: 0 0 15px gray;
     }
+
+.input-validation-error{
+    border-color:red;
+}

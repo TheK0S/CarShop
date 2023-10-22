@@ -83,7 +83,7 @@ namespace CarShopAPI.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> Create([Bind("Id,UserName,Password,Email,AccessLevel")] User user)
+        public async Task<ActionResult<User>> Create([Bind("Id,UserName,Password,Email,RoleId")] User user)
         {
           if (_context.User == null)
           {

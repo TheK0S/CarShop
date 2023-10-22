@@ -63,19 +63,21 @@ namespace CarShopAPI.Controllers
             return car;
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<Car>> PostCar([Bind("Name,ShortDesc,LongDesc,Title,Url,Price,IsFavourite,Count")] Car car)
-        //{
-        //    if (_db.Car == null)
-        //    {
-        //        return Problem("Entity set 'CarShopDbContext.User'  is null.");
-        //    }
+        // POST: api/Cars
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Car>> PostCar([FromBody] Car car)
+        {
+            if (_db.Car == null)
+            {
+                return Problem("Entity set 'CarShopDbContext.Car'  is null.");
+            }
 
-        //    _db.Car.Add(car);
-        //    await _db.SaveChangesAsync();
+            await _db.Car.AddAsync(car);
+            await _db.SaveChangesAsync();
 
-        //    return CreatedAtAction("GetCar", new { id = car.Id }, car);
-        //}
+            return StatusCode(201);
+        }
 
         // PUT: api/Cars/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -101,28 +103,12 @@ namespace CarShopAPI.Controllers
                 }
                 else
                 {
-                    throw;
+                    return StatusCode(500);
                 }
             }
 
             return Ok();
-        }
-
-        // POST: api/Cars
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Car>> PostCar([FromBody] Car car)
-        {
-          if (_db.Car == null)
-          {
-              return Problem("Entity set 'CarShopDbContext.Car'  is null.");
-          }
-
-            await _db.Car.AddAsync(car);
-            await _db.SaveChangesAsync();
-
-            return CreatedAtAction("GetCar", new { id = car.Id }, car);
-        }
+        }        
 
         // DELETE: api/Cars/5
         [HttpDelete("{id}")]
@@ -139,9 +125,16 @@ namespace CarShopAPI.Controllers
             }
 
             _db.Car.Remove(car);
-            await _db.SaveChangesAsync();
 
-            return NoContent();
+            try
+            {
+                await _db.SaveChangesAsync();
+                return StatusCode(200);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
         private bool CarExists(int id)
