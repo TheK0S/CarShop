@@ -7,10 +7,10 @@ namespace CarShop.DI
 {
     public class Messanger : IMessanger
     {
-        private readonly SmtpClient _client;
+        private readonly SmtpMailClient _client;
         private readonly MessageFactory _factory;
 
-        public Messanger(SmtpClient client, MessageFactory factory)
+        public Messanger(SmtpMailClient client, MessageFactory factory)
         {
             _client = client;
             _factory = factory;

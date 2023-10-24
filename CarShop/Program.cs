@@ -13,13 +13,7 @@ builder.Services.AddSession();
 
 builder.Configuration.AddJsonFile("appsettings.json");
 
-builder.Services.AddScoped<IMessanger, Messanger>();
-builder.Services.AddTransient<MessageFactory>();
-builder.Services.AddScoped<SmtpMailClient>();
-builder.Services.AddScoped<SmtpSettings>(provider =>
-{
-    return new SmtpSettings() { Host = "smtp.gmail.com", Port = 587, Login = "turchakkonstantin@gmail.com", Password = "jwjn owcn prki keuj" };
-});
+builder.Services.AddMessanger();
 builder.Services.AddTransient<CategoryService>();
 
 var app = builder.Build();

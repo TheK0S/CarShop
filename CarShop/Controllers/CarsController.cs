@@ -8,12 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using CarShop.Models;
 using System.Runtime.ConstrainedExecution;
 using System.Net;
+using CarShop.Interfaces;
 
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
     {
         private readonly HttpClient httpClient = new HttpClient();
+        private IMessanger messanger;
+        public CarsController(IMessanger messanger)
+        {
+            this.messanger = messanger;
+        }
+
 
         // GET: Cars
         public async Task<IActionResult> Index()
@@ -30,6 +37,9 @@ namespace CarShop.Controllers
             var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
             if (car == null)
                 return NotFound();
+
+            //messanger.SendMessage("Hello! It is car shop", new Models.User() { UserName = "Kos", Email = "turchak@sweetondale.cz" }, "Car shop");
+
 
             return View(car);
         }
