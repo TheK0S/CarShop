@@ -10,7 +10,8 @@ namespace CarShopAPI.Models
         public DbSet<Category> Category { get; set; }
         public DbSet<ShopCartItem> ShopCartItem { get; set; }
         public DbSet<Role> Role { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=DESKTOP-K60TA32\\SQLEXPRESS;Database=CarShop;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
+            => options.UseSqlServer("Server=DESKTOP-HHO6PH0;Database=CarShop;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
     }
 }

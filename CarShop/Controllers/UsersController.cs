@@ -30,14 +30,18 @@ namespace CarShop.Controllers
             var user = await httpClient.GetFromJsonAsync<User>($"{Api.apiUri}user/{id}");
 
             if (user == null)
-                return NotFound();
+                return NotFound();           
 
             return View(user);
         }
 
         // GET: Users/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles");
+
+            ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name));
+
             return View();
         }
 
@@ -67,6 +71,11 @@ namespace CarShop.Controllers
                 else
                     return NoContent();
             }
+
+            var rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles");
+
+            ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name), rolesList?.FirstOrDefault(r => r.Id == user.RoleId));
+
             return View(user);
         }
 
@@ -81,6 +90,10 @@ namespace CarShop.Controllers
             if (user == null)
                 return NotFound();
 
+            var rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles");
+
+            ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name), rolesList?.FirstOrDefault(r => r.Id == user.RoleId));
+
             return View(user);
         }
 
@@ -89,7 +102,7 @@ namespace CarShop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Password,Email,AccessLevel")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,Password,Email,RoleId")] User user)
         {
             if (id != user.Id)
                 return NotFound();

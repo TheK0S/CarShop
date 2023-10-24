@@ -25,9 +25,10 @@
                                 Database management
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/Users">Users</a></li>
-                                <li><a class="dropdown-item" href="/Cars">Cars</a></li>
-                                <li><a class="dropdown-item" href="/Categories">Categories</a></li>
+                                <li><a asp-controller="Roles" asp-action="Index" class="dropdown-item">Roles</a></li>
+                                <li><a asp-controller="Users" asp-action="Index" class="dropdown-item">Users</a></li>
+                                <li><a asp-controller="Cars" asp-action="Index" class="dropdown-item">Cars</a></li>
+                                <li><a asp-controller="Categories" asp-action="Index" class="dropdown-item">Categories</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
@@ -49,6 +50,6 @@
     </footer>
 	<script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="/js/site.js"></script>
-    @RenderSection("Scripts", false);
+    @RenderSection("Scripts", false)
 </body>
 </html>

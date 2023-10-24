@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="RoleId" class="control-label"></label>
-                <input type="number" asp-for="RoleId" class="form-control mb-2" />
+                <select asp-for="RoleId" asp-items="@ViewBag.Roles" class="form-control mb-2"></select>
                 <span asp-validation-for="RoleId" class="text-danger"></span>
             </div>
             <div class="form-group mt-3">
