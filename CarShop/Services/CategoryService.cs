@@ -1,4 +1,6 @@
-﻿namespace CarShop.Models
+﻿using CarShop.Models;
+
+namespace CarShop.Services
 {
     public class CategoryService
     {

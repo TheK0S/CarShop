@@ -1,4 +1,6 @@
-﻿namespace CarShop.Models
+﻿using CarShop.Models;
+
+namespace CarShop.ViewModels
 {
     public class HomeIndexViewModel
     {

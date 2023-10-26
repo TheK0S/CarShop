@@ -1,23 +1,39 @@
 ﻿using CarShop.Interfaces;
 using CarShop.Models;
+using CarShop.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace CarShop.Controllers
 {
-    public class UserAuthenticationController : Controller
+    public class AccountController : Controller
     {
         private string cookieKey = "Auth";
         private IMemoryCache memoryCache;
         private IMessanger messanger;
 
-        public UserAuthenticationController(IMemoryCache memoryCache, IMessanger messanger)
+        public AccountController(IMemoryCache memoryCache, IMessanger messanger)
         {
             this.memoryCache = memoryCache;
             this.messanger = messanger;
         }
-        // GET: UserAuthenticationController
+
+        [HttpGet]
+        public IActionResult Register() => View();
+
+
+        [HttpPost]
+        public async Task<IActionResult> Login(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+
+            }
+            return View(model);
+        }
+
+
         public ActionResult Index()
         {
             return View();

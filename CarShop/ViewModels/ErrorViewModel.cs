@@ -1,4 +1,4 @@
-namespace CarShop.Models
+namespace CarShop.ViewModels
 {
     public class ErrorViewModel
     {
