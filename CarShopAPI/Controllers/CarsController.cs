@@ -66,7 +66,7 @@ namespace CarShopAPI.Controllers
         // POST: api/Cars
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Car>> PostCar([FromBody] Car car)
+        public async Task<ActionResult<Car>> PostCar(Car car)
         {
             if (_db.Car == null)
             {
@@ -74,9 +74,16 @@ namespace CarShopAPI.Controllers
             }
 
             await _db.Car.AddAsync(car);
-            await _db.SaveChangesAsync();
 
-            return StatusCode(201);
+            try
+            {
+                await _db.SaveChangesAsync();
+                return StatusCode(201);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }            
         }
 
         // PUT: api/Cars/5

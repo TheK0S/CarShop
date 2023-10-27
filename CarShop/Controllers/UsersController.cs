@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using CarShop.Interfaces;
 using System.Net;
+using CarShop.Helpers;
 
 namespace CarShop.Controllers
 {
@@ -71,7 +72,9 @@ namespace CarShop.Controllers
                 ModelState.AddModelError(nameof(user.Email), "Email is not valid");
 
             if (ModelState.IsValid)
-            {                
+            {
+                user.Password = HashPasswordHelper.HashPasword(user.Password);
+
                 var response = await _userService.CreateUserAsync(user);
 
                 if (response.StatusCode == HttpStatusCode.Created)
@@ -153,7 +156,7 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var response = await _userService.GetUserAsync((int)id);
+            var response = await _userService.GetUserAsync(id);
             var user = response.Data;
 
             if (user == null)

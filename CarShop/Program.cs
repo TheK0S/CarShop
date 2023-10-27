@@ -23,7 +23,8 @@ builder.Configuration.AddJsonFile("appsettings.json");
 builder.Services.AddMessanger(builder.Configuration);
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
-builder.Services.AddTransient<CategoryService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ICarService, CarService>();
 
 var app = builder.Build();
 

@@ -1,25 +1,24 @@
 ﻿using CarShop.Interfaces;
 using CarShop.Models;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Net.Http;
+using System.Text.Json;
 
 namespace CarShop.Services
 {
-    public class UserService : IUserService
+    public class CarService : ICarService
     {
         HttpClient httpClient = new HttpClient();
-        public async Task<BaseResponse<IEnumerable<User>>> GetUsersAsync()
-        {
-            var response = await httpClient.GetAsync($"{Api.apiUri}user");
 
-            var baseResponse = new BaseResponse<IEnumerable<User>>() { StatusCode = response.StatusCode };
+        public async Task<BaseResponse<IEnumerable<Car>>> GetCarAsync()
+        {
+            var response = await httpClient.GetAsync($"{Api.apiUri}cars");
+
+            var baseResponse = new BaseResponse<IEnumerable<Car>>() { StatusCode = response.StatusCode };
 
             try
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    baseResponse.Data = await response.Content.ReadFromJsonAsync<IEnumerable<User>>();
+                    baseResponse.Data = await response.Content.ReadFromJsonAsync<IEnumerable<Car>>();
                 }
             }
             catch (JsonException ex)
@@ -36,17 +35,17 @@ namespace CarShop.Services
             return baseResponse;
         }
 
-        public async Task<BaseResponse<User>> GetUserAsync(int id)
+        public async Task<BaseResponse<Car>> GetCarAsync(int id)
         {
-            var response = await httpClient.GetAsync($"{Api.apiUri}user/{id}");
+            var response = await httpClient.GetAsync($"{Api.apiUri}cars/{id}");
 
-            var baseResponse = new BaseResponse<User>() { StatusCode = response.StatusCode};
-            
+            var baseResponse = new BaseResponse<Car>() { StatusCode = response.StatusCode };
+
             try
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    baseResponse.Data = await response.Content.ReadFromJsonAsync<User>();
+                    baseResponse.Data = await response.Content.ReadFromJsonAsync<Car>();
                 }
             }
             catch (JsonException ex)
@@ -63,23 +62,9 @@ namespace CarShop.Services
             return baseResponse;
         }
 
-        public async Task<BaseResponse<bool>> CreateUserAsync(User user)
+        public async Task<BaseResponse<bool>> CreateCarAsync(Car car)
         {
-            var response = await httpClient.PostAsJsonAsync($"{Api.apiUri}user", user);
-
-            var baseResponse = new BaseResponse<bool>() 
-            {
-                Data = response.IsSuccessStatusCode,
-                Message = await response.Content.ReadAsStringAsync(),
-                StatusCode = response.StatusCode                
-            };
-
-            return baseResponse;
-        }
-
-        public async Task<BaseResponse<bool>> UpdateUserAsync(User user)
-        {
-            var response = await httpClient.PutAsJsonAsync($"{Api.apiUri}user/{user.Id}", user);
+            var response = await httpClient.PostAsJsonAsync($"{Api.apiUri}cars", car);
 
             var baseResponse = new BaseResponse<bool>()
             {
@@ -91,9 +76,23 @@ namespace CarShop.Services
             return baseResponse;
         }
 
-        public async Task<BaseResponse<bool>> DeleteUserAsync(int userId)
+        public async Task<BaseResponse<bool>> UpdateCarAsync(Car car)
         {
-            var response = await httpClient.DeleteAsync($"{Api.apiUri}user/{userId}");
+            var response = await httpClient.PutAsJsonAsync($"{Api.apiUri}cars/{car.Id}", car);
+
+            var baseResponse = new BaseResponse<bool>()
+            {
+                Data = response.IsSuccessStatusCode,
+                Message = await response.Content.ReadAsStringAsync(),
+                StatusCode = response.StatusCode
+            };
+
+            return baseResponse;
+        }
+
+        public async Task<BaseResponse<bool>> DeleteCarAsync(int carId)
+        {
+            var response = await httpClient.DeleteAsync($"{Api.apiUri}cars/{carId}");
 
             var baseResponse = new BaseResponse<bool>()
             {

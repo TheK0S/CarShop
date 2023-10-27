@@ -4,18 +4,54 @@ using CarShop.Models;
 using CarShop.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 
 namespace CarShop.Services
 {
     public class AccountService : IAccountService
     {
-        public Task<int> Login(LoginViewModel model)
+        private readonly IUserService _userService;
+
+        public AccountService(IUserService userService)
         {
-            throw new NotImplementedException();
+            _userService = userService;
         }
 
-        public async Task<int> Register(RegisterViewModel model)
+        public async Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
+        {
+            var users = await _userService.GetUsersAsync();
+            var user = users.Data.FirstOrDefault(u => u.UserName == model.Name);
+
+            if (user == null)
+            {
+                return new BaseResponse<ClaimsIdentity>
+                {
+                    Message = "User not found",
+                    StatusCode = HttpStatusCode.NotFound
+                };
+            }
+
+            if (user.Password != HashPasswordHelper.HashPasword(model.Password))
+            {
+                return new BaseResponse<ClaimsIdentity>
+                {
+                    Message = "Incorrect password",
+                    StatusCode = HttpStatusCode.NotFound
+                };
+            }
+
+            var result = await Authenticate(user);
+
+            return new BaseResponse<ClaimsIdentity>
+            {
+                Data = result,
+                StatusCode = HttpStatusCode.OK
+            };
+        }
+
+        public async Task<BaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
         {
             HttpClient httpClient = new HttpClient();
             try
@@ -25,43 +61,101 @@ namespace CarShop.Services
 
                 if (user != null)
                 {
-                    return StatusCodes.Status409Conflict;
+                    return new BaseResponse<ClaimsIdentity>()
+                    {
+                        Message = "There is already a user with this login",
+                        StatusCode = HttpStatusCode.InternalServerError
+                    };
                 }
 
                 user = new User 
                 { 
                     UserName = model.Name,
                     Email = model.Email,
-                    Password = HashPasswordHelper.HashPasword(model.Password)
+                    Password = HashPasswordHelper.HashPasword(model.Password),
+                    RoleId = model.RoleId
                 };
 
-                await httpClient.PostAsJsonAsync<User>($"{Api.apiUri}user", user);
+                var response = await _userService.CreateUserAsync(user);
+
+                if (!response.Data)
+                {
+                    return new BaseResponse<ClaimsIdentity>()
+                    {
+                        Message = "User is not added",
+                        StatusCode = HttpStatusCode.InternalServerError
+                    };
+                }
+
+                var result = await Authenticate(user);
+
+                return new BaseResponse<ClaimsIdentity>()
+                {
+                    Data = result,
+                    Message = "User is added",
+                    StatusCode = HttpStatusCode.OK
+                };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCodes.Status500InternalServerError;
+                return new BaseResponse<ClaimsIdentity>()
+                {
+                    Message = ex.Message,
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
             }
-            return 0;
         }
 
-        public Task<bool> ChangePassword(ChangePasswordViewModel model)
+        public async Task<BaseResponse<bool>> ChangePassword(ChangePasswordViewModel model)
         {
-            throw new NotImplementedException();
-        }
+            var users = await _userService.GetUsersAsync();
+            var user = users.Data.FirstOrDefault(u => u.UserName == model.UserName);
 
-        Task<BaseResponse<IEnumerable<User>>> IAccountService.Register(RegisterViewModel model)
-        {
-            throw new NotImplementedException();
-        }
+            if (user == null)
+            {
+                return new BaseResponse<bool>()
+                {
+                    Data = false,
+                    Message = "User not found",
+                    StatusCode = HttpStatusCode.NotFound
+                };
+            }
 
-        Task<BaseResponse<bool>> IAccountService.Login(LoginViewModel model)
-        {
-            throw new NotImplementedException();
-        }
+            user.Password = HashPasswordHelper.HashPasword(model.NewPassword);
 
-        Task<BaseResponse<bool>> IAccountService.ChangePassword(ChangePasswordViewModel model)
+            var response = await _userService.UpdateUserAsync(user);
+
+            if(response.StatusCode == HttpStatusCode.OK)
+            {
+                return new BaseResponse<bool>()
+                {
+                    Message = "Password updated",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            return new BaseResponse<bool>()
+            {
+                Message = "Password is not updated",
+                StatusCode = HttpStatusCode.NotFound,
+            };
+        }        
+
+        private async Task<ClaimsIdentity> Authenticate(User user)
         {
-            throw new NotImplementedException();
+            List<Role> roles;
+            using (HttpClient httpClient = new HttpClient())
+            {
+                roles = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles") ?? new List<Role>();
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault(r => r.Id == user.RoleId).Name)
+            };
+            return new ClaimsIdentity(claims, "ApplicationCookie",
+                ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         }
     }
 }

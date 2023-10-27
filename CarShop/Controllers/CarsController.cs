@@ -9,23 +9,27 @@ using CarShop.Models;
 using System.Runtime.ConstrainedExecution;
 using System.Net;
 using CarShop.Interfaces;
+using CarShop.Services;
 
 namespace CarShop.Controllers
 {
     public class CarsController : Controller
     {
-        private readonly HttpClient httpClient = new HttpClient();
-        private IMessanger messanger;
-        public CarsController(IMessanger messanger)
+        private readonly ICategoryService _categoryService;
+        private readonly ICarService _carService;
+
+        public CarsController(ICategoryService categoryService, ICarService carService)
         {
-            this.messanger = messanger;
+            _categoryService = categoryService;
+            _carService = carService;
         }
 
 
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            return View(await httpClient.GetFromJsonAsync<IEnumerable<Car>>($"{Api.apiUri}cars"));
+            var response = await _carService.GetCarsAsync();
+            return View(response.Data);
         }
 
         // GET: Cars/Details/5
@@ -34,13 +38,13 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            var response = await _carService.GetCarAsync((int)id);
+            var car = response.Data;
+
             if (car == null)
                 return NotFound();
 
             //messanger.SendMessage("Hello! It is car shop", new Models.User() { UserName = "Kos", Email = "turchak@sweetondale.cz" }, "Car shop");
-
-
             return View(car);
         }
 
@@ -50,7 +54,9 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            var response = await _carService.GetCarAsync((int)id);
+            var car = response.Data;
+
             if (car == null)
                 return NotFound();
 
@@ -73,11 +79,11 @@ namespace CarShop.Controllers
             if (!ModelState.IsValid)
                 return View(car);
 
-            await httpClient.PostAsJsonAsync($"{Api.apiUri}cars", car);
-            if (car == null)
-                return Problem("Something happened wrong");
+            var response = await _carService.CreateCarAsync(car);
+            if (response.StatusCode == HttpStatusCode.Created)
+                return RedirectToAction(nameof(Index));
 
-            return RedirectToAction(nameof(Index));
+            return Problem("Something happened wrong",null, (int)response.StatusCode);
         }
 
         // GET: Cars/Edit/5
@@ -86,7 +92,9 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            var response = await _carService.GetCarAsync((int)id);
+            var car = response.Data;
+
             if (car == null)
                 return NotFound();
 
@@ -106,9 +114,9 @@ namespace CarShop.Controllers
             if (!ModelState.IsValid)
                 return View(car);
 
-            var response = await httpClient.PutAsJsonAsync($"{Api.apiUri}cars/{id}", car);
+            var response = await _carService.UpdateCarAsync(car);
 
-            if (response.IsSuccessStatusCode)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return RedirectToAction(nameof(Index));
 
             return View(car);
@@ -120,10 +128,11 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var car = await httpClient.GetFromJsonAsync<Car>($"{Api.apiUri}cars/{id}");
+            var response = await _carService.GetCarAsync((int)id);
+            var car = response.Data;
 
             if (car == null)
-                return NotFound();
+                return NotFound(response.Message);
 
             return View(car);
         }
@@ -136,12 +145,18 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var car = await httpClient.DeleteAsync($"{Api.apiUri}cars/{id}");
+            var response = await _carService.GetCarAsync((int)id);
+            var car = response.Data;
 
-            if (car == null)
+            if(car == null)
                 return NotFound();
 
-            return RedirectToAction(nameof(Index));
+            var delResponse = await _carService.DeleteCarAsync((int)id);
+
+            if (delResponse.Data)
+                return RedirectToAction(nameof(Index));
+
+            return StatusCode((int)delResponse.StatusCode, delResponse.Message);
         }
     }
 }
