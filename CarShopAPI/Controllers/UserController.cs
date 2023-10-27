@@ -77,7 +77,7 @@ namespace CarShopAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return StatusCode(200, "User's data is updated");
         }
 
         // POST: api/User
@@ -95,7 +95,7 @@ namespace CarShopAPI.Controllers
             _context.User.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return StatusCode(201, "User is added");
         }
 
         // DELETE: api/User/5
@@ -115,7 +115,7 @@ namespace CarShopAPI.Controllers
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return StatusCode(201, "User is deleted");
         }
 
         private bool UserExists(int id)

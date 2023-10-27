@@ -21,6 +21,8 @@ builder.Configuration.AddUserSecrets("3c88f461-1a0d-4ce6-a501-dac8ad8dae28");
 builder.Configuration.AddJsonFile("appsettings.json");
 
 builder.Services.AddMessanger(builder.Configuration);
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<CategoryService>();
 
 var app = builder.Build();

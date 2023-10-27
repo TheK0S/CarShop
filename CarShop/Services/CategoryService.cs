@@ -1,15 +1,33 @@
-﻿using CarShop.Models;
+﻿using CarShop.Interfaces;
+using CarShop.Models;
 
 namespace CarShop.Services
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
-        public async Task<List<Category>> GetCategoriesAsync()
+        public async Task<BaseResponse<IEnumerable<Category>>> GetCategoriesAsync()
         {
-            HttpClient httpClient = new HttpClient();
-            var categories = await httpClient.GetFromJsonAsync<IEnumerable<Category>>($"{Api.apiUri}category");
+            throw new NotImplementedException();
+        }
 
-            return categories?.ToList() ?? new List<Category>();
+        public async Task<BaseResponse<Category>> GetCategoryAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<BaseResponse<bool>> CreateCategoryAsync(Category user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<BaseResponse<bool>> UpdateCategoryAsync(Category user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<BaseResponse<bool>> DeleteCategoryAsync(int categoryId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

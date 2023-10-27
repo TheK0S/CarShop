@@ -1,4 +1,5 @@
-﻿using CarShop.Interfaces;
+﻿using CarShop.Helpers;
+using CarShop.Interfaces;
 using CarShop.Models;
 using CarShop.ViewModels;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -27,16 +28,38 @@ namespace CarShop.Services
                     return StatusCodes.Status409Conflict;
                 }
 
-                user = new User { UserName = model.Name, Email = model.Email, Password = model.Password };
+                user = new User 
+                { 
+                    UserName = model.Name,
+                    Email = model.Email,
+                    Password = HashPasswordHelper.HashPasword(model.Password)
+                };
+
+                await httpClient.PostAsJsonAsync<User>($"{Api.apiUri}user", user);
             }
             catch (Exception)
             {
-
-                throw;
+                return StatusCodes.Status500InternalServerError;
             }
+            return 0;
         }
 
         public Task<bool> ChangePassword(ChangePasswordViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<BaseResponse<IEnumerable<User>>> IAccountService.Register(RegisterViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<BaseResponse<bool>> IAccountService.Login(LoginViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<BaseResponse<bool>> IAccountService.ChangePassword(ChangePasswordViewModel model)
         {
             throw new NotImplementedException();
         }

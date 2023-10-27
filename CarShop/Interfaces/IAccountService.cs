@@ -1,4 +1,5 @@
-﻿using CarShop.ViewModels;
+﻿using CarShop.Models;
+using CarShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -6,10 +7,10 @@ namespace CarShop.Interfaces
 {
     public interface IAccountService
     {
-        Task<int> Register(RegisterViewModel model);
+        Task<BaseResponse<IEnumerable<User>>> Register(RegisterViewModel model);
 
-        Task<int> Login(LoginViewModel model);
+        Task<BaseResponse<bool>> Login(LoginViewModel model);
 
-        Task<bool> ChangePassword(ChangePasswordViewModel model);
+        Task<BaseResponse<bool>> ChangePassword(ChangePasswordViewModel model);
     }
 }

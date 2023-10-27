@@ -4,10 +4,10 @@ namespace CarShop.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetUsersAsync();
-        Task<User> GetUserAsync(int id);
-        Task CreateUserAsync(User user);
-        Task UpdateUserAsync(User user);
-        Task DeleteUserAsync(int userId);
+        Task<BaseResponse<IEnumerable<User>>> GetUsersAsync();
+        Task<BaseResponse<User>> GetUserAsync(int id);
+        Task<BaseResponse<bool>> CreateUserAsync(User user);
+        Task<BaseResponse<bool>> UpdateUserAsync(User user);
+        Task<BaseResponse<bool>> DeleteUserAsync(int userId);
     }
 }

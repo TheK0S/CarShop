@@ -8,17 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using CarShop.Models;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using CarShop.Interfaces;
+using System.Net;
 
 namespace CarShop.Controllers
 {
     public class UsersController : Controller
     {
-        private HttpClient httpClient = new HttpClient();
+        private IUserService _userService;
 
+        public UsersController(IUserService userService)
+        {
+            _userService = userService;
+        }
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await httpClient.GetFromJsonAsync<IEnumerable<User>>($"{Api.apiUri}user"));
+            var response = await _userService.GetUsersAsync();
+            return View(response.Data);
         }
 
         // GET: Users/Details/5
@@ -27,10 +34,12 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var user = await httpClient.GetFromJsonAsync<User>($"{Api.apiUri}user/{id}");
+            var response = await _userService.GetUserAsync((int)id);
+
+            var user = response.Data;
 
             if (user == null)
-                return NotFound();           
+                return NotFound(response.Message);      
 
             return View(user);
         }
@@ -38,7 +47,7 @@ namespace CarShop.Controllers
         // GET: Users/Create
         public async Task<IActionResult> Create()
         {
-            var rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles");
+            var rolesList = await GetRoleList();
 
             ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name));
 
@@ -62,17 +71,16 @@ namespace CarShop.Controllers
                 ModelState.AddModelError(nameof(user.Email), "Email is not valid");
 
             if (ModelState.IsValid)
-            {
-                //string apiUrl = $"user?id=0&UserName={user.UserName}&Password={user.Password}&Email={user.Email}&AccessLevel={user.AccessLevel}"; 
-                var response = await httpClient.PostAsJsonAsync($"{Api.apiUri}user", user);
+            {                
+                var response = await _userService.CreateUserAsync(user);
 
-                if (response.IsSuccessStatusCode)
+                if (response.StatusCode == HttpStatusCode.Created)
                     return RedirectToAction(nameof(Index));
                 else
-                    return NoContent();
+                    return StatusCode((int)response.StatusCode, response.Message);
             }
 
-            var rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles");
+            var rolesList = await GetRoleList();
 
             ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name), rolesList?.FirstOrDefault(r => r.Id == user.RoleId));
 
@@ -85,12 +93,13 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var user = await httpClient.GetFromJsonAsync<User>($"{Api.apiUri}user/{id}");
+            var response = await _userService.GetUserAsync((int)id);
+            var user = response.Data;
 
             if (user == null)
                 return NotFound();
 
-            var rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles");
+            var rolesList = await GetRoleList();
 
             ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name), rolesList?.FirstOrDefault(r => r.Id == user.RoleId));
 
@@ -109,13 +118,18 @@ namespace CarShop.Controllers
 
             if (ModelState.IsValid)
             {
-                var response = await httpClient.PutAsJsonAsync($"{Api.apiUri}user/{id}", user);
+                var response = await _userService.UpdateUserAsync(user);
 
-                if (response == null)
-                    return NotFound();
+                if (!response.Data)
+                    return StatusCode((int)response.StatusCode, response.Message);
 
                 return RedirectToAction(nameof(Index));
             }
+
+            var rolesList = await GetRoleList();
+
+            ViewBag.Roles = new SelectList(rolesList, nameof(Role.Id), nameof(Role.Name), rolesList?.FirstOrDefault(r => r.Id == user.RoleId));
+
             return View(user);
         }
 
@@ -125,9 +139,11 @@ namespace CarShop.Controllers
             if (id == null)
                 return NotFound();
 
-            var user = await httpClient.GetFromJsonAsync<User>($"{Api.apiUri}user/{id}");
+            var response = await _userService.GetUserAsync((int)id);
+            var user = response.Data;
+
             if (user == null)
-                return NotFound();
+                return StatusCode((int)response.StatusCode, response.Message);
 
             return View(user);
         }
@@ -137,13 +153,30 @@ namespace CarShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await httpClient.GetFromJsonAsync<User>($"{Api.apiUri}user/{id}");
-            if(user == null)
-                return NotFound();
+            var response = await _userService.GetUserAsync((int)id);
+            var user = response.Data;
 
-            await httpClient.DeleteAsync($"{Api.apiUri}user/{id}");
+            if (user == null)
+                return StatusCode((int)response.StatusCode, response.Message);
 
-            return RedirectToAction(nameof(Index));
+            var delResponse = await _userService.DeleteUserAsync(id);
+
+            if(delResponse.Data)
+                return RedirectToAction(nameof(Index));
+
+            return StatusCode((int)delResponse.StatusCode, delResponse.Message);
+        }
+
+        private async Task<List<Role>> GetRoleList()
+        {
+            List<Role> rolesList;
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                rolesList = await httpClient.GetFromJsonAsync<List<Role>>($"{Api.apiUri}roles") ?? new List<Role>();
+            }
+
+            return rolesList;
         }
     }
 }

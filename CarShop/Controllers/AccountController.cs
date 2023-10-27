@@ -10,13 +10,15 @@ namespace CarShop.Controllers
     public class AccountController : Controller
     {
         private string cookieKey = "Auth";
-        private IMemoryCache memoryCache;
-        private IMessanger messanger;
+        private IMemoryCache _memoryCache;
+        private IMessanger _messanger;
+        private IUserService _userService;
 
-        public AccountController(IMemoryCache memoryCache, IMessanger messanger)
+        public AccountController(IMemoryCache memoryCache, IMessanger messanger, IUserService userService)
         {
-            this.memoryCache = memoryCache;
-            this.messanger = messanger;
+            _memoryCache = memoryCache;
+            _messanger = messanger;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -51,7 +53,7 @@ namespace CarShop.Controllers
             string value = HttpContext.Session.GetString("sessionKey");
 
 
-            if (!memoryCache.TryGetValue("saved_list", out object valueCache))
+            if (!_memoryCache.TryGetValue("saved_list", out object valueCache))
             {
                 valueCache = LoadData();
 
@@ -62,11 +64,11 @@ namespace CarShop.Controllers
                 //memoryCache.Set("saved_list", valueCache, TimeSpan.FromSeconds(10));
 
                 //save to cathe with time window = 5 second, and if data no using durin this time data will be deleted 
-                memoryCache.Set("saved_list", valueCache, new MemoryCacheEntryOptions() { SlidingExpiration = TimeSpan.FromSeconds(5)});
+                _memoryCache.Set("saved_list", valueCache, new MemoryCacheEntryOptions() { SlidingExpiration = TimeSpan.FromSeconds(5)});
             }
 
             string message = "some text";
-            messanger.SendMessage(message, new User(), "title");
+            _messanger.SendMessage(message, new User(), "title");
 
             return View();
         }
