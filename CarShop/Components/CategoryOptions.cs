@@ -1,4 +1,5 @@
-﻿using CarShop.Models;
+﻿using CarShop.Interfaces;
+using CarShop.Models;
 using CarShop.Services;
 using CarShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +8,17 @@ namespace CarShop.Components
 {
     public class CategoryOptions : ViewComponent
     {
-        private readonly CategoryService service;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryOptions(CategoryService service)
+        public CategoryOptions(ICategoryService categoryService)
         {
-            this.service = service;
+            _categoryService = categoryService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(int selectedCategoryId)
         {
-            List<Category> categories = await service.GetCategoriesAsync();
+            var response = await _categoryService.GetCategoriesAsync();
+            List<Category> categories = response.Data.ToList();
 
             CategoryOptionsViewModel viewModel = new CategoryOptionsViewModel()
             {

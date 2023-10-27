@@ -1,5 +1,6 @@
 ﻿using CarShop.Interfaces;
 using CarShop.Models;
+using System.Net;
 using System.Text.Json;
 
 namespace CarShop.Services
@@ -8,7 +9,7 @@ namespace CarShop.Services
     {
         HttpClient httpClient = new HttpClient();
 
-        public async Task<BaseResponse<IEnumerable<Car>>> GetCarAsync()
+        public async Task<BaseResponse<IEnumerable<Car>>> GetCarsAsync()
         {
             var response = await httpClient.GetAsync($"{Api.apiUri}cars");
 
@@ -23,12 +24,12 @@ namespace CarShop.Services
             }
             catch (JsonException ex)
             {
-                baseResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
                 baseResponse.Message = ex.Message;
             }
             catch (Exception ex)
             {
-                baseResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
                 baseResponse.Message = ex.Message;
             }
 
@@ -50,12 +51,12 @@ namespace CarShop.Services
             }
             catch (JsonException ex)
             {
-                baseResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
                 baseResponse.Message = ex.Message;
             }
             catch (Exception ex)
             {
-                baseResponse.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
                 baseResponse.Message = ex.Message;
             }
 
