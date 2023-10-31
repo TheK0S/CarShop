@@ -13,7 +13,7 @@ namespace CarShop.Controllers
 {
     public class AccountController : Controller
     {
-        private string cookieKey = "Auth";
+        //private string cookieKey = "Auth";
         private IMemoryCache _memoryCache;
         private IMessanger _messanger;
         private IAccountService _accountService;
@@ -55,7 +55,7 @@ namespace CarShop.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var response = await _accountService.Login(model);
 
