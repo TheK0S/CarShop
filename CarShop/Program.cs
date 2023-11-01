@@ -4,6 +4,7 @@ using CarShop.Services;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -14,7 +15,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => options.LoginPath = "/login");
+    .AddCookie(options => options.LoginPath = "/account/login");
 builder.Services.AddAuthorization();
 
 builder.Configuration.AddUserSecrets("3c88f461-1a0d-4ce6-a501-dac8ad8dae28");
@@ -43,6 +44,8 @@ app.UseStaticFiles();
 app.UseSession();
 
 app.UseRouting();
+
+app.Map("/Data", [Authorize] () => "Data");
 
 app.MapControllerRoute(
     name: "default",

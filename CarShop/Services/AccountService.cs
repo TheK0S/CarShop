@@ -2,10 +2,7 @@
 using CarShop.Interfaces;
 using CarShop.Models;
 using CarShop.ViewModels;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 
 namespace CarShop.Services
@@ -22,7 +19,7 @@ namespace CarShop.Services
         public async Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
         {
             var users = await _userService.GetUsersAsync();
-            var user = users.Data.FirstOrDefault(u => u.UserName == model.Name);
+            var user = users.Data?.FirstOrDefault(u => u.UserName == model.Name);
 
             if (user == null)
             {
