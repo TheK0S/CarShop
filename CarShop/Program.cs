@@ -15,7 +15,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => options.LoginPath = "/account/login");
+    .AddCookie(options => options.LoginPath = "/Account/login");
 builder.Services.AddAuthorization();
 
 builder.Configuration.AddUserSecrets("3c88f461-1a0d-4ce6-a501-dac8ad8dae28");
@@ -29,21 +29,24 @@ builder.Services.AddTransient<ICarService, CarService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
-
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+
+app.Map("/hello", [Authorize] () => "hello world");
+app.Map("/", () => "main");
 
 app.Map("/Data", [Authorize] () => "Data");
 
