@@ -4,7 +4,7 @@ using CarShopAPI.Interfaces;
 using CarShopAPI.Models;
 using CarShopAPI.Repository;
 using Microsoft.EntityFrameworkCore;
-
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,5 +35,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.MapPost("/carsfilter", async (context) =>
+//{
+//    if (context.Request.Method == "POST" && context.Request.ContentType == "application/json")
+//    {
+//        using(var reader = new StreamReader(context.Request.Body))
+//        {
+//            var json = await reader.ReadToEndAsync();
+//            var filter = JsonConvert.DeserializeObject<CarsFilter>(json);
+//        }
+//    }    
+
+
+//        app.Run();
+//});
 
 app.Run();

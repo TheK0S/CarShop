@@ -45,6 +45,32 @@ namespace CarShopAPI.Controllers
             return cars.Where(c => c.IsFavourite == true).ToList() ?? new List<Car>();
         }
 
+        [HttpGet("Filtered")]
+        public async Task<ActionResult<List<Car>>> GetFilteredCars(
+            [FromQuery] int minPrice,
+            [FromQuery] int maxPrice, 
+            [FromQuery] bool isFavourite, 
+            [FromQuery] List<int> categoriesId)
+        {
+            if (_db.Car == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Car> cars = await _db.Car.ToArrayAsync();
+            
+            if(maxPrice > 0)
+                cars = cars.Where(car => car.Price >= minPrice && car.Price <= maxPrice);
+
+            if (categoriesId != null && categoriesId.Count() > 0)
+                cars = cars.Where(car => categoriesId.Contains(car.CategoryId));
+
+            if (isFavourite)
+                cars = cars.Where(car => car.IsFavourite == true);
+
+            return cars.ToList();
+        }
+
         // GET: api/Cars/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Car>> GetCar(int id)

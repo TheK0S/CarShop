@@ -1,4 +1,5 @@
-﻿using CarShop.Interfaces;
+﻿using Azure;
+using CarShop.Interfaces;
 using CarShop.Models;
 using System.Net;
 using System.Text.Json;
@@ -13,6 +14,32 @@ namespace CarShop.Services
         {
             var response = await httpClient.GetAsync($"{Api.apiUri}cars");
 
+            var baseResponse = new BaseResponse<IEnumerable<Car>>() { StatusCode = response.StatusCode };
+
+            try
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    baseResponse.Data = await response.Content.ReadFromJsonAsync<IEnumerable<Car>>();
+                }
+            }
+            catch (JsonException ex)
+            {
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
+                baseResponse.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
+                baseResponse.Message = ex.Message;
+            }
+
+            return baseResponse;
+        }
+
+        public async Task<BaseResponse<IEnumerable<Car>>> GetFavouriteCarsAsync()
+        {
+            var response = await httpClient.GetAsync($"{Api.apiUri}cars/favourite");
             var baseResponse = new BaseResponse<IEnumerable<Car>>() { StatusCode = response.StatusCode };
 
             try

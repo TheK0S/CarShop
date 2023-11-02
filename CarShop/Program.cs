@@ -15,7 +15,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => options.LoginPath = "/Account/login");
+    .AddCookie(options => options.LoginPath = "/account/login");
 builder.Services.AddAuthorization();
 
 builder.Configuration.AddUserSecrets("3c88f461-1a0d-4ce6-a501-dac8ad8dae28");
@@ -44,9 +44,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-app.Map("/hello", [Authorize] () => "hello world");
-app.Map("/", () => "main");
 
 app.Map("/Data", [Authorize] () => "Data");
 
