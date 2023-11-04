@@ -15,7 +15,7 @@ namespace CarShopAPI.Controllers
             _db = db;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<ActionResult<List<ShopCartItem>>> GetCartItems(int shopCartId)
         {
             if (shopCartId == 0 || _db.ShopCartItem == null)
@@ -43,14 +43,14 @@ namespace CarShopAPI.Controllers
 
             return shopCartItem;
         }
-        //==================================================================
+        
         [HttpPost]
-        public async Task<IActionResult> CreateCart(ShopCart shopCart)
+        public async Task<IActionResult> CreateCartItem(ShopCartItem shopCartItem)
         {
-            if (shopCart == null || _db.ShopCart == null)
+            if (shopCartItem == null || _db.ShopCartItem == null)
                 return NotFound();
 
-            _db.ShopCart.Add(shopCart);
+            _db.ShopCartItem.Add(shopCartItem);
 
             try
             {
@@ -65,11 +65,11 @@ namespace CarShopAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCart(int id, ShopCart shopCart)
+        public async Task<IActionResult> PutCartItem(int id, ShopCartItem shopCartItem)
         {
-            if (id != shopCart.Id) return BadRequest();
+            if (id != shopCartItem.Id) return BadRequest();
 
-            _db.Entry(shopCart).State = EntityState.Modified;
+            _db.Entry(shopCartItem).State = EntityState.Modified;
 
             try
             {
@@ -84,17 +84,17 @@ namespace CarShopAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCart(int id)
+        public async Task<IActionResult> DeleteCartItem(int id)
         {
-            if (_db.ShopCart == null)
+            if (_db.ShopCartItem == null)
                 return NotFound();
 
-            var shopCart = await _db.ShopCart.FindAsync(id);
+            var shopCartItem = await _db.ShopCartItem.FindAsync(id);
 
-            if (shopCart == null)
+            if (shopCartItem == null)
                 return NotFound();
 
-            _db.ShopCart.Remove(shopCart);
+            _db.ShopCartItem.Remove(shopCartItem);
 
             try
             {

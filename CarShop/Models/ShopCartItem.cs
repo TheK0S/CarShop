@@ -2,9 +2,11 @@
 {
     public class ShopCartItem
     {
-        public int ItemId { get; set; }
-        public Car Car { get; set; }
-        public int Price { get; set; }
-        public string ShopCartId { get; set; }
+        public int Id { get; set; }
+        public int ShopCartId { get; set; }
+        public int? OrderId { get; set; }
+        public int CarId { get; set; }
+        public uint Price { get; set; }
+        public int Count { get; set; }
     }
 }

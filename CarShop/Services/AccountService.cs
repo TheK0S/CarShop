@@ -149,7 +149,8 @@ namespace CarShop.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault(r => r.Id == user.RoleId).Name)
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault(r => r.Id == user.RoleId).Name),
+                new Claim(ClaimsIdentity.DefaultIssuer, user.Id.ToString()),
             };
             return new ClaimsIdentity(claims, "ApplicationCookie",
                 ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

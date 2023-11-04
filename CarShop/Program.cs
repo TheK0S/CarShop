@@ -15,7 +15,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => options.LoginPath = "/account/login");
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/account/login";
+        options.AccessDeniedPath = "/accessdenied";
+    });
 builder.Services.AddAuthorization();
 
 builder.Configuration.AddUserSecrets("3c88f461-1a0d-4ce6-a501-dac8ad8dae28");
@@ -26,6 +30,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<ICarService, CarService>();
+builder.Services.AddTransient<IShopCartService, ShopCartService>();
 
 var app = builder.Build();
 
@@ -46,6 +51,12 @@ app.UseAuthorization();
 
 
 app.Map("/Data", [Authorize] () => "Data");
+
+app.Map("/accessdenied", async (HttpContext context) =>
+{
+    context.Response.StatusCode = 403;
+    await context.Response.WriteAsync("Access Denied");
+});
 
 app.MapControllerRoute(
     name: "default",
