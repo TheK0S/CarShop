@@ -1,21 +1,23 @@
 ﻿using CarShop.Interfaces;
+using CarShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarShop.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICategoryService _categoryService;
-        private readonly ICarService _carService;
+        private readonly IShopCartService _shopCartService;
 
-        public CartController(ICategoryService categoryService, ICarService carService)
+        public CartController(IShopCartService shopCartService)
         {
-            _categoryService = categoryService;
-            _carService = carService;
+            _shopCartService = shopCartService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            int.TryParse(User.FindFirstValue("UserId"), out int userId);
+            var cart = await _shopCartService.GetShopCartByUserId(userId);
+            return View(cart);
         }
     }
 }

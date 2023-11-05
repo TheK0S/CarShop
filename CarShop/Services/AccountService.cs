@@ -10,10 +10,12 @@ namespace CarShop.Services
     public class AccountService : IAccountService
     {
         private readonly IUserService _userService;
+        private readonly IShopCartService _shopCartService;
 
-        public AccountService(IUserService userService)
+        public AccountService(IUserService userService, IShopCartService shopCartService)
         {
             _userService = userService;
+            _shopCartService = shopCartService;
         }
 
         public async Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model)
@@ -65,7 +67,7 @@ namespace CarShop.Services
                     };
                 }
 
-                user = new User 
+                user = new User
                 { 
                     UserName = model.Name,
                     Email = model.Email,
@@ -73,9 +75,9 @@ namespace CarShop.Services
                     RoleId = model.RoleId
                 };
 
-                var response = await _userService.CreateUserAsync(user);
+                var baseResponse = await _userService.CreateUserAsync(user);
 
-                if (!response.Data)
+                if (baseResponse.StatusCode != HttpStatusCode.Created || baseResponse.Data == null)
                 {
                     return new BaseResponse<ClaimsIdentity>()
                     {
@@ -83,6 +85,10 @@ namespace CarShop.Services
                         StatusCode = HttpStatusCode.InternalServerError
                     };
                 }
+
+                User createdUser = baseResponse.Data;
+
+                await _shopCartService.CreateShopCart(createdUser.Id);
 
                 var result = await Authenticate(user);
 
@@ -150,7 +156,7 @@ namespace CarShop.Services
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault(r => r.Id == user.RoleId).Name),
-                new Claim(ClaimsIdentity.DefaultIssuer, user.Id.ToString()),
+                new Claim("UserId", user.Id.ToString()),
             };
             return new ClaimsIdentity(claims, "ApplicationCookie",
                 ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

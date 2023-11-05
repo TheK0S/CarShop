@@ -31,6 +31,22 @@ namespace CarShopAPI.Controllers
             return shopCart;
         }
 
+        [HttpGet("user/{id}")]
+        public ActionResult<ShopCart> GetCartbyUserId(int userId)
+        {
+            if (userId == 0 || _db.ShopCart == null)
+                return NotFound();
+
+            var shopCart = _db.ShopCart.Where(c => c.UserId == userId).FirstOrDefault();
+
+            if (shopCart == null)
+                return NotFound();
+
+            shopCart.Items = _db.ShopCartItem.Where(i => i.ShopCartId == shopCart.Id).ToList();
+
+            return shopCart;
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateCart(ShopCart shopCart)
         {

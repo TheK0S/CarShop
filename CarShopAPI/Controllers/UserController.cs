@@ -93,9 +93,16 @@ namespace CarShopAPI.Controllers
             user.Created = DateTime.Now;
 
             _context.User.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
 
-            return StatusCode(201, "User is added");
+                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "User is not added");
+            }
         }
 
         // DELETE: api/User/5

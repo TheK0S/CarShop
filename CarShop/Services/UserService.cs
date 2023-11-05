@@ -63,13 +63,14 @@ namespace CarShop.Services
             return baseResponse;
         }
 
-        public async Task<BaseResponse<bool>> CreateUserAsync(User user)
+        public async Task<BaseResponse<User>> CreateUserAsync(User user)
         {
             var response = await httpClient.PostAsJsonAsync($"{Api.apiUri}user", user);
+            var createdUser = await response.Content.ReadFromJsonAsync<User>();
 
-            var baseResponse = new BaseResponse<bool>() 
+            var baseResponse = new BaseResponse<User>() 
             {
-                Data = response.IsSuccessStatusCode,
+                Data = createdUser,
                 Message = await response.Content.ReadAsStringAsync(),
                 StatusCode = response.StatusCode                
             };

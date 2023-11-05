@@ -17,9 +17,54 @@ namespace CarShop.Services
             httpClient = new HttpClient();
         }
 
+        public async Task<BaseResponse<bool>> CreateShopCart(int userId)
+        {
+            if(userId <= 0)
+                return new BaseResponse<bool> { StatusCode = HttpStatusCode.BadRequest, Data = false, Message = "Incorrect user Id" };
+
+            //added user checking
+
+            var shopCart = new ShopCart{ UserId = userId };
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(shopCart), Encoding.UTF8, "application/json");
+            var response = await httpClient.PutAsync($"{Api.apiUri}shopcart", content);
+
+            return new BaseResponse<bool>()
+            {
+                StatusCode = response.StatusCode,
+                Data = response.IsSuccessStatusCode
+            };
+        }
+
         public async Task<BaseResponse<ShopCart>> GetShopCart(int id)
         {
-            var response = await httpClient.GetAsync($"{Api.apiUri}shopcart");
+            var response = await httpClient.GetAsync($"{Api.apiUri}shopcart/{id}");
+
+            var baseResponse = new BaseResponse<ShopCart>() { StatusCode = response.StatusCode };
+
+            try
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    baseResponse.Data = await response.Content.ReadFromJsonAsync<ShopCart>();
+                }
+            }
+            catch (JsonException ex)
+            {
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
+                baseResponse.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
+                baseResponse.Message = ex.Message;
+            }
+
+            return baseResponse;
+        }
+
+        public async Task<BaseResponse<ShopCart>> GetShopCartByUserId(int userId)
+        {
+            var response = await httpClient.GetAsync($"{Api.apiUri}shopcart/user/{userId}");
 
             var baseResponse = new BaseResponse<ShopCart>() { StatusCode = response.StatusCode };
 
