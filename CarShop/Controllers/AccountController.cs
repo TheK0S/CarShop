@@ -59,7 +59,7 @@ namespace CarShop.Controllers
             {
                 var response = await _accountService.Login(model);
 
-                if(response.StatusCode == HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(response.Data));

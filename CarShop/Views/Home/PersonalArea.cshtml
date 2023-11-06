@@ -1,0 +1,57 @@
+﻿@model CarShop.ViewModels.PersonalAreaViewModel
+
+<h1 class="text-center m-5">Personal Area</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <h3>@Model.ErrorMessage</h3>
+}
+
+<div class="container-sm">
+    <div class="row">
+        <p class="col-4"><b>User name</b></p>
+        <p class="col-8">@Model.UserName</p>
+    </div>
+    <div class="row">
+        <p class="col-4"><b>Email</b></p>
+        <p class="col-8">@Model.Email</p>
+    </div>
+    <div class="row">
+        <p class="col-4"><b>Registered date</b></p>
+        <p class="col-8">@Model.CreateDate</p>
+    </div>
+    <h2>Personal orders</h2>z
+    <div>
+        @foreach (var order in Model.Orders ?? new List<Order>())
+        {
+            <div class="row">
+                <div class="col-2">@order.DateTime</div>
+                <div class="col-10">
+                    @{
+                        var items = order.shopCartItems;
+                    }
+                    @if (items != null)
+                    {
+                        for (int i = 0; i < items.Count(); i++)
+                        {
+                            <div class="row">
+                                <p class="col-2">@i</p>
+                                <a asp-asp-controller="Cars" asp-action="CarDetails" asp-asp-all-route-data="@items[i].CarId.ToString()" class="col-4">
+                                    <b>Name:</b>@items[i].Car?.Name
+                                </a>
+                                <p class="col-3"><b>Price:</b> @items[i].Car?.Price</p>
+                                <p class="col-3"><b>Count:</b> @items[i].Car?.Count</p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-center">Order is empty</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

@@ -26,7 +26,7 @@ namespace CarShop.Services
 
             var shopCart = new ShopCart{ UserId = userId };
             HttpContent content = new StringContent(JsonConvert.SerializeObject(shopCart), Encoding.UTF8, "application/json");
-            var response = await httpClient.PutAsync($"{Api.apiUri}shopcart", content);
+            var response = await httpClient.PostAsync($"{Api.apiUri}shopcart", content);
 
             return new BaseResponse<bool>()
             {

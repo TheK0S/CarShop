@@ -50,7 +50,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.Map("/Data", [Authorize] () => "Data");
+app.Map("/Data", [Authorize] (HttpContext context) =>
+    $"Name: {context.User.FindFirstValue(ClaimTypes.Name)}\n" +
+    $"Role: {context.User.FindFirstValue(ClaimTypes.Role)}\n" +
+    $"Id: {context.User.FindFirstValue(ClaimTypes.NameIdentifier)}\n");
 
 app.Map("/accessdenied", async (HttpContext context) =>
 {

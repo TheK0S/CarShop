@@ -11,6 +11,6 @@ namespace CarShop.Interfaces
 
         Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model);
 
-        Task<BaseResponse<bool>> ChangePassword(ChangePasswordViewModel model);
+        Task<BaseResponse<ClaimsIdentity>> ChangePassword(ChangePasswordViewModel model);
     }
 }

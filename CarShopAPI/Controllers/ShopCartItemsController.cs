@@ -41,6 +41,8 @@ namespace CarShopAPI.Controllers
             if (shopCartItem == null)
                 return NotFound();
 
+            shopCartItem.Car = _db.Car.First(Car => Car.Id == shopCartItem.CarId);
+            
             return shopCartItem;
         }
         

@@ -15,9 +15,9 @@ namespace CarShop.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            int.TryParse(User.FindFirstValue("UserId"), out int userId);
-            var cart = await _shopCartService.GetShopCartByUserId(userId);
-            return View(cart);
+            int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out int userId);
+            var response = await _shopCartService.GetShopCartByUserId(userId);
+            return View(response.Data);
         }
     }
 }

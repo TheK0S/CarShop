@@ -2,6 +2,8 @@
 using CarShop.Interfaces;
 using CarShop.Models;
 using CarShop.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net;
 using System.Security.Claims;
 
@@ -90,11 +92,10 @@ namespace CarShop.Services
 
                 await _shopCartService.CreateShopCart(createdUser.Id);
 
-                var result = await Authenticate(user);
+                var result = await Authenticate(createdUser);
 
                 return new BaseResponse<ClaimsIdentity>()
                 {
-                    Data = result,
                     Message = "User is added",
                     StatusCode = HttpStatusCode.OK
                 };
@@ -109,16 +110,15 @@ namespace CarShop.Services
             }
         }
 
-        public async Task<BaseResponse<bool>> ChangePassword(ChangePasswordViewModel model)
+        public async Task<BaseResponse<ClaimsIdentity>> ChangePassword(ChangePasswordViewModel model)
         {
             var users = await _userService.GetUsersAsync();
             var user = users.Data.FirstOrDefault(u => u.UserName == model.UserName);
 
             if (user == null)
             {
-                return new BaseResponse<bool>()
+                return new BaseResponse<ClaimsIdentity>()
                 {
-                    Data = false,
                     Message = "User not found",
                     StatusCode = HttpStatusCode.NotFound
                 };
@@ -130,14 +130,14 @@ namespace CarShop.Services
 
             if(response.StatusCode == HttpStatusCode.OK)
             {
-                return new BaseResponse<bool>()
+                return new BaseResponse<ClaimsIdentity>()
                 {
                     Message = "Password updated",
                     StatusCode = HttpStatusCode.OK,
                 };
             }
 
-            return new BaseResponse<bool>()
+            return new BaseResponse<ClaimsIdentity>()
             {
                 Message = "Password is not updated",
                 StatusCode = HttpStatusCode.NotFound,
@@ -156,10 +156,10 @@ namespace CarShop.Services
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, roles.FirstOrDefault(r => r.Id == user.RoleId).Name),
-                new Claim("UserId", user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
-            return new ClaimsIdentity(claims, "ApplicationCookie",
-                ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
+            return new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         }
     }
 }
