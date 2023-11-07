@@ -2,7 +2,7 @@
 
 <h1 class="text-center m-5">Personal Area</h1>
 
-@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+@if (string.IsNullOrWhiteSpace(Model.ErrorMessage))
 {
     <h3>@Model.ErrorMessage</h3>
 }
@@ -20,9 +20,16 @@
         <p class="col-4"><b>Registered date</b></p>
         <p class="col-8">@Model.CreateDate</p>
     </div>
-    <h2>Personal orders</h2>z
+    <h2 class="text-center mt-3">Personal orders</h2>
     <div>
-        @foreach (var order in Model.Orders ?? new List<Order>())
+        @if(Model.Orders == null || Model.Orders.Count() == 0)
+        {
+            <div class=" text-center">
+                <p>You haven't had any orders yet.</p>
+                <a asp-controller="Cart" asp-action="Index" class="btn btn-primary">Create order</a>
+            </div>
+        }
+        @foreach (var order in Model?.Orders ?? new List<Order>())
         {
             <div class="row">
                 <div class="col-2">@order.DateTime</div>

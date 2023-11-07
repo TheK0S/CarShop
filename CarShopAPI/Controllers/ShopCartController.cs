@@ -15,7 +15,7 @@ namespace CarShopAPI.Controllers
             _db = db;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{cartId}")]
         public ActionResult<ShopCart> GetCart(int cartId)
         {
             if(cartId == 0 || _db.ShopCart == null)
@@ -31,18 +31,18 @@ namespace CarShopAPI.Controllers
             return shopCart;
         }
 
-        [HttpGet("user/{id}")]
-        public ActionResult<ShopCart> GetCartbyUserId(int userId)
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<ShopCart>> GetCartbyUserId(int userId)
         {
             if (userId == 0 || _db.ShopCart == null)
                 return NotFound();
 
-            var shopCart = _db.ShopCart.Where(c => c.UserId == userId).FirstOrDefault();
+            var shopCart = await _db.ShopCart.Where(c => c.UserId == userId).FirstOrDefaultAsync();
 
             if (shopCart == null)
                 return NotFound();
 
-            shopCart.Items = _db.ShopCartItem.Where(i => i.ShopCartId == shopCart.Id).ToList();
+            shopCart.Items = await _db.ShopCartItem.Where(i => i.ShopCartId == shopCart.Id).ToListAsync();
 
             return shopCart;
         }

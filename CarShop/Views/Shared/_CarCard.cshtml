@@ -8,5 +8,6 @@
         <p>@Model.ShortDesc</p>
         <p>Price: $ @Model.Price</p>
         <a asp-controller="Cars" asp-action="CarDetails" asp-route-id="@Model.Id" class="btn btn-info text-center">More details</a>
+        <a asp-controller="Cart" asp-action="AddItem" asp-route-carId="@Model.Id" class="btn btn-success text-center">Bye</a>
     </div>
 </div>

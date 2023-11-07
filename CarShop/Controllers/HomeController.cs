@@ -49,7 +49,7 @@ namespace CarShop.Controllers
         public async Task<IActionResult> PersonalArea()
         {
             string errorMessage = "";
-            int.TryParse(User.FindFirstValue("UserId"), out int currentUserId);
+            int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out int currentUserId);
 
             var responseUser = await _userService.GetUserAsync(currentUserId);
             if (responseUser.StatusCode != HttpStatusCode.OK)
