@@ -1,5 +1,7 @@
-﻿using CarShop.Interfaces;
+﻿using Azure;
+using CarShop.Interfaces;
 using CarShop.Models;
+using CarShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
@@ -52,6 +54,19 @@ namespace CarShop.Controllers
             await _shopCartService.AddItem(item);
 
             return RedirectToAction("Index", "Cart");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CreateOrder()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateOrder(CreateOrderViewModel model)
+        {
+
+            return Problem("Something happened wrong", null, (int)response.StatusCode);
         }
     }
 }

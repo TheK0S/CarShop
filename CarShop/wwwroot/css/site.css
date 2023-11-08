@@ -64,3 +64,6 @@ img {
     border-color:red;
 }
 
+.table-row-h100px td{
+    vertical-align: middle;
+}

@@ -51,6 +51,7 @@ namespace CarShopAPI.Controllers
             if(order == null)
                 return BadRequest();
 
+            order.DateTime = DateTime.Now;
             await _db.Order.AddAsync(order);
 
             try

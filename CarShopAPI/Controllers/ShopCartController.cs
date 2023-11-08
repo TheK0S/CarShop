@@ -42,7 +42,12 @@ namespace CarShopAPI.Controllers
             if (shopCart == null)
                 return NotFound();
 
-            shopCart.Items = await _db.ShopCartItem.Where(i => i.ShopCartId == shopCart.Id).ToListAsync();
+            var shopCartItems = await _db.ShopCartItem.Where(i => i.ShopCartId == shopCart.Id && i.OrderId == null).ToListAsync();
+            if(shopCartItems != null)
+                foreach (var item in shopCartItems)
+                    item.Car = await _db.Car.Where(Car => Car.Id == item.CarId).FirstAsync();
+
+            shopCart.Items = shopCartItems;
 
             return shopCart;
         }
