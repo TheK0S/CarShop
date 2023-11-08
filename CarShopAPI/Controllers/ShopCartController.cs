@@ -115,11 +115,5 @@ namespace CarShopAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        [HttpGet("novapost")]
-        public ActionResult<NovaPost> GetNovaPost() => new NovaPost();
-
-        [HttpGet("ukrpost")]
-        public ActionResult<UkrPost> GetUkrPost() => new UkrPost();
     }
 }

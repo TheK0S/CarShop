@@ -8,8 +8,12 @@ namespace CarShop.ViewModels
         [Required]
         public int UserId { get; set; }
         [Required]
-        public string DeliveryAdress { get; set; }
+        public string? Post { get; set; }
         [Required]
-        public string PaymentMethod { get; set; }
+        public string? DeliveryCity { get; set; }
+        [Required]
+        public string? DeliveryAddress { get; set; }
+        [Required]
+        public string? PaymentMethod { get; set; }
     }
 }

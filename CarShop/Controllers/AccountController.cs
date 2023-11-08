@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
@@ -71,6 +72,7 @@ namespace CarShop.Controllers
             return View(model);
         }
 
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
