@@ -1,0 +1,40 @@
+﻿@model CarShop.ViewModels.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "CreateOrder";
+}
+
+<h1>CreateOrder</h1>
+
+<h4>CreateOrderViewModel</h4>
+<hr />
+<div class="row">
+    <div class="offset-md-4 col-md-4">
+        <form asp-action="CreateOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveryAdress" class="control-label"></label>
+                <input asp-for="DeliveryAdress" class="form-control" />
+                <span asp-validation-for="DeliveryAdress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentMethod" class="control-label"></label>
+                <input asp-for="PaymentMethod" class="form-control" />
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Order goods" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Cart" asp-action="Index">Back to the Cart</a>
+</div>
+

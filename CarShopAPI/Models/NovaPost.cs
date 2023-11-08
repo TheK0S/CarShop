@@ -1,20 +1,20 @@
-﻿namespace CarShop.Models
+﻿namespace CarShopAPI.Models
 {
-    public class UkrPost
+    public class NovaPost
     {
-        Dictionary<string, List<string>>? Departments { get; set; }
-        public UkrPost()
+        public Dictionary<string, List<string>>? Departments { get; set; }
+        public NovaPost()
         {
             Departments = new Dictionary<string, List<string>>
             {
                 { "Kamyanske", new List<string>
                     {
-                        "N 1, bul. Nezalezhnosti 22a",
+                        "N 1, bul. Nezalezhnosti 2a",
                         "N 2, str. Svobody 13",
-                        "N 3, pr. Stepana Bandery 55",
-                        "N 4, bul. Budivelnykiv 15",
+                        "N 3, pr. Anoshkina 55",
+                        "N 4, bul. Budivelnykiv 63",
                         "N 5, pr. Peremogy 63",
-                    }
+                    } 
                 },
                 { "Dnipro", new List<string>
                     {

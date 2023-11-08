@@ -37,8 +37,9 @@ namespace CarShop.Controllers
                 var response = await _accountService.Register(model);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    var claimsIdentity = response.Data;
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(response.Data));
+                        new ClaimsPrincipal(claimsIdentity));
 
                     return RedirectToAction("Index", "Home");
                 }

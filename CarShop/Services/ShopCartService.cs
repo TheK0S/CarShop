@@ -140,12 +140,12 @@ namespace CarShop.Services
             return baseResponse;
         }
 
-        public async Task<BaseResponse<bool>> CreateOrder(int shopCartId)
+        public async Task<BaseResponse<bool>> CreateOrder(int userId)
         {
-            if(shopCartId <= 0)
+            if(userId <= 0)
                 return new BaseResponse<bool> { StatusCode = HttpStatusCode.BadRequest, Data = false, Message = "Incorrect id" };
 
-            var shopCartResponse = await GetShopCart(shopCartId);
+            var shopCartResponse = await GetShopCartByUserId(userId);
             var shopCart = shopCartResponse.Data;
 
             if(shopCart == null)

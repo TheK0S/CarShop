@@ -4,6 +4,12 @@
     ViewData["Title"] = "Cart";
 }
 
+<style>
+    .table-row-h100px td {
+        vertical-align: middle;
+    }
+</style>
+
 <h1 class="text-center">Cart</h1>
 
 <div class="container-md text-center">
@@ -20,7 +26,9 @@
                 <th>
                     Price
                 </th>
-                <th></th>
+                <th>
+                    Remove
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -66,3 +74,4 @@
         <a asp-controller="Cart" asp-action="CreateOrder" class="btn btn-success">Make an order</a>
     </div>
 </div>
+

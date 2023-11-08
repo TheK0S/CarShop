@@ -26,9 +26,11 @@ namespace CarShop.Controllers
             return View(response.Data);
         }
 
-        public async Task RemoveItem(int id)
+        public async Task<ActionResult> RemoveItem(int id)
         {
             await _shopCartService.RemoveItem(id);
+
+            return RedirectToAction("Index", "Cart");
         }
 
         public async Task<ActionResult> AddItem(int carId)
@@ -39,14 +41,14 @@ namespace CarShop.Controllers
             var cart = shopCartResponse.Data;
             var car = carResponse.Data;
             if (cart == null || car == null)
-                return RedirectToAction("Index", "Home"); ;
+                return RedirectToAction("Index", "Home");
 
             var item = new ShopCartItem 
             { 
                 ShopCartId = cart.Id,
                 OrderId = null,
                 CarId = car.Id,
-                Car = car,
+                Car = null,
                 Price = car.Price,
                 Count = 1
             };
@@ -57,7 +59,7 @@ namespace CarShop.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreateOrder()
+        public IActionResult CreateOrder()
         {
             return View();
         }
@@ -65,8 +67,20 @@ namespace CarShop.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrder(CreateOrderViewModel model)
         {
+            if(model == null)
+                return Problem("Something happened wrong", null, 404);
 
-            return Problem("Something happened wrong", null, (int)response.StatusCode);
+            if (!ModelState.IsValid)
+                return View();
+
+            int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
+            var response = await _shopCartService.CreateOrder(userId);
+
+            bool isOrderCreated = response.Data;
+            if (!isOrderCreated)
+                return Problem("Something happened wrong", null, 404);
+
+            return View("OrderCreated");
         }
     }
 }

@@ -10,8 +10,9 @@
         <div class="offset-md-1 col-md-5 col-sm-12 col-xs-12">
             <p>@Model.Title</p>
             <p>Car price: @Model.Price</p>
-            <a href="#" class="btn btn-primary">Buy car</a>
-        </div>
+            <a asp-controller="Home" asp-action="CarList" class="btn btn-primary manageBtn text-center">Back</a>
+            <a asp-controller="Cart" asp-action="AddItem" asp-route-carId="@Model.Id" class="btn btn-success manageBtn text-center">Bye</a>
+        </div>v
         <p class="mt-3">@Model.LongDesc</p>
     </div>
 </div>
