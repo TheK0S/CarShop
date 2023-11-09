@@ -72,8 +72,7 @@ namespace CarShop.Controllers
             return View(model);
         }
 
-        [Authorize]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

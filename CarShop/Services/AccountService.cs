@@ -96,6 +96,7 @@ namespace CarShop.Services
 
                 return new BaseResponse<ClaimsIdentity>()
                 {
+                    Data = result,
                     Message = "User is added",
                     StatusCode = HttpStatusCode.OK
                 };

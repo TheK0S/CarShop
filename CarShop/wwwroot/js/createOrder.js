@@ -1,70 +1,81 @@
-﻿const deliveryCity = document.getElementById('deliveryCity'),
-    deliveryAddress = document.getElementById('deliveryAddress'),
-    paymentMethod = document.getElementById('paymentMethod'),
-    post = document.getElementById('post')
+﻿const deliveryCity = document.getElementById('deliveryCity')
+const deliveryAddress = document.getElementById('deliveryAddress')
+const paymentMethod = document.getElementById('paymentMethod')
+const post = document.getElementById('post')
+let novaPost = {};
+let ukrPost = {};
 
-const novaPost = getNovaPost();
-const ukrPost = getUkrPost();
+
+setDeliveryCityOptions();
 
 
-post.addEventListener('change', function () {
-    deliveryCity.innerHTML = '';
+(async () => {
+    await getNovaPost();
+    await getUkrPost();
 
-    if (post.value === 'novaPost') {
-        for (key in novaPost.departments) {
+    console.log(novaPost)
+    console.log(ukrPost)
+
+    setDeliveryCityOptions();
+    post.addEventListener('change', setDeliveryCityOptions);
+    deliveryCity.addEventListener('change', setDeliveryAddressOption);
+})();
+
+
+
+
+function setDeliveryCityOptions() {
+    deliveryCity.innerHTML = '<option></option>';
+    deliveryAddress.innerHTML = '';
+
+    if (post.value === 'Nova Post') {
+        for (key in novaPost.Departments) {
             const option = document.createElement('option');
             option.text = key;
             option.value = key;
             deliveryCity.appendChild(option);
         }
-    } else if (post.value === 'ukrPost') {
-        for (key in ukrPost.departments) {
+    } else if (post.value === 'Ukr Post') {
+        for (key in ukrPost.Departments) {
             const option = document.createElement('option');
             option.text = key;
             option.value = key;
             deliveryCity.appendChild(option);
         }
     }
-});
+}
 
-deliveryCity.addEventListener('change', function () {
+
+function setDeliveryAddressOption() {
     deliveryAddress.innerHTML = '';
-    const selectedPost = post.value === 'novaPost' ? novaPost : ukrPost;
+    const selectedPost = post.value === 'Nova Post' ? novaPost : ukrPost;
 
-    selectedPost.departments[deliveryCity.value].forEach(value => {
+    selectedPost.Departments[deliveryCity.value].forEach(value => {
         const option = document.createElement('option');
         option.text = value;
         option.value = value;
         deliveryAddress.appendChild(option);
     });
-});
+}
 
 
-
-    async function getNovaPost() {
-        try {
-            const response = await fetch('https://localhost:7279/novapost');
-
-            if (!response.ok) {
-                throw new Error('Error' + response.status);
-            }
-            return await response.json();
-
-        } catch (error) {
-            console.log(error);
-        }
+async function getNovaPost() {
+    try {
+        const response = await fetch('https://localhost:7279/novapost');
+        const data = await response.json();
+        novaPost = data;
+    } catch (error) {
+        console.error(error);
     }
+}
+
 
 async function getUkrPost() {
     try {
         const response = await fetch('https://localhost:7279/ukrpost');
-
-        if (!response.ok) {
-            throw new Error('Error' + response.status);
-        }
-        return await response.json();
-
+        const data = await response.json();
+        ukrPost = data;
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }

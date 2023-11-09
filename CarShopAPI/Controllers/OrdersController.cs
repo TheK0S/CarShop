@@ -51,11 +51,24 @@ namespace CarShopAPI.Controllers
             if(order == null)
                 return BadRequest();
 
+            List<ShopCartItem>? items = new List<ShopCartItem>();
+            if(order.shopCartItems != null)
+                order.shopCartItems.ForEach(item => items.Add(item));
+
             order.DateTime = DateTime.Now;
+            order.shopCartItems = null;
             await _db.Order.AddAsync(order);
 
             try
             {
+                await _db.SaveChangesAsync();
+
+                items.ForEach(item =>
+                {
+                    item.OrderId = order.Id;
+                    _db.ShopCartItem.Update(item);
+                });
+
                 await _db.SaveChangesAsync();
 
                 return StatusCode(201);
