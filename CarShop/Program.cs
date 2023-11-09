@@ -1,11 +1,13 @@
 using CarShop.DI;
 using CarShop.Interfaces;
+using CarShop.Models;
 using CarShop.Services;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +51,21 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Map("/novapost", mailApp =>
+{
+    mailApp.Run(async context =>
+    {
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(new NovaPost()));
+    });
+});
+
+app.Map("/ukrpost", mailApp =>
+{
+    mailApp.Run(async context =>
+    {
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(new UkrPost()));
+    });
+});
 
 app.Map("/Data", [Authorize] (HttpContext context) =>
     $"Name: {context.User.FindFirstValue(ClaimTypes.Name)}\n" +

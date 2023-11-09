@@ -2,12 +2,14 @@
 using CarShop.Interfaces;
 using CarShop.Models;
 using CarShop.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
 
 namespace CarShop.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IShopCartService _shopCartService;
