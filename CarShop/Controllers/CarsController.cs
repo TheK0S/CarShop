@@ -10,6 +10,8 @@ using System.Runtime.ConstrainedExecution;
 using System.Net;
 using CarShop.Interfaces;
 using CarShop.Services;
+using Microsoft.AspNetCore.Routing;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace CarShop.Controllers
 {
@@ -17,11 +19,13 @@ namespace CarShop.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly ICarService _carService;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public CarsController(ICategoryService categoryService, ICarService carService)
+        public CarsController(ICategoryService categoryService, ICarService carService, IWebHostEnvironment hostEnvironment)
         {
             _categoryService = categoryService;
             _carService = carService;
+            _hostingEnvironment = hostEnvironment;
         }
 
 
@@ -157,6 +161,57 @@ namespace CarShop.Controllers
                 return RedirectToAction(nameof(Index));
 
             return StatusCode((int)delResponse.StatusCode, delResponse.Message);
+        }
+
+        [HttpPost("filter")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CarFilter(CarsFilter filter)
+        {
+            if (filter == null)
+                return NotFound();
+
+            var response = await _carService.PostFilterredCarsAsync(filter);
+            if(response.StatusCode != HttpStatusCode.OK)
+                return NotFound();
+
+            var filterredCars = response.Data ?? new List<Car>();
+
+            string htmlText = "";
+
+            foreach (var car in filterredCars)
+            {
+                htmlText += $"" +
+                    $"< div class=\"col-xxl-4 col-lg-6 col-md-12 p-2\">" +
+                        $"<img src = \"{car.Url}\" alt=\"{car.Name}\">" +
+                        $"<div class=\"text-start p-2\">" +
+                            $"<h3 class=\"text-center\">{car.Name}</h3>" +
+                            $"<p>{car.Title}</p>" +
+                            $"<p>{car.ShortDesc}</p>" +
+                            $"<p>Price: $ {car.Price}</p>" +
+                            $"<a asp-controller=\"Cars\" asp-action=\"CarDetails\" asp-route-id=\"{car.Id}\" class=\"manageBtn btn btn-info text-center\">More details</a>" +
+                            $"<a asp-controller= \"Cart\" asp-action= \"AddItem\" asp-route-carId= \"{car.Id}\" class=\"manageBtn btn btn-success text-center\">Bye</a>" +
+                        $"</div>" +
+                    $"</div>";
+            }
+
+            return StatusCode(200, htmlText);
+        }
+
+        private string GetTextHtmlCarCard()
+        {
+            var pathPartialView = _hostingEnvironment.ContentRootPath + "/Views/Shared/_CarCard.cshtml";
+
+            if (System.IO.File.Exists(pathPartialView))
+            {
+                var content = System.IO.File.ReadAllText(pathPartialView);
+                // Делайте что-то с содержимым файла
+                return content;
+            }
+            else
+            {
+                // Обработка ситуации, когда файл не найден
+                return string.Empty;
+            }
         }
     }
 }

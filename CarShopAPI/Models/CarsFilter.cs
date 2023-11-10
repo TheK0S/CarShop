@@ -4,8 +4,9 @@ namespace CarShopAPI.Models
 {
     public class CarsFilter
     {
-        public uint Price { get; set; } = 0;
-        public bool IsFavourite { get; set; } = false;
-        public int CategoryId { get; set; }
+        public int MinPrice { get; set; }
+        public int MaxPrice { get; set; }
+        public List<string>? SelectedCategories { get; set; }
+        public bool IsFavourite { get; set; }
     }
 }

@@ -63,6 +63,32 @@ namespace CarShop.Services
             return baseResponse;
         }
 
+        public async Task<BaseResponse<List<Car>>> PostFilterredCarsAsync(CarsFilter filter)
+        {
+            var response = await httpClient.GetAsync($"{Api.apiUri}cars/filtered");
+            var baseResponse = new BaseResponse<List<Car>>() { StatusCode = response.StatusCode };
+
+            try
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    baseResponse.Data = await response.Content.ReadFromJsonAsync<List<Car>>();
+                }
+            }
+            catch (JsonException ex)
+            {
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
+                baseResponse.Message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                baseResponse.StatusCode = HttpStatusCode.InternalServerError;
+                baseResponse.Message = ex.Message;
+            }
+
+            return baseResponse;
+        }
+
         public async Task<BaseResponse<Car>> GetCarAsync(int id)
         {
             var response = await httpClient.GetAsync($"{Api.apiUri}cars/{id}");
