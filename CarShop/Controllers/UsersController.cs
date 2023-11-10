@@ -11,9 +11,11 @@ using System.Text.RegularExpressions;
 using CarShop.Interfaces;
 using System.Net;
 using CarShop.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         private IUserService _userService;

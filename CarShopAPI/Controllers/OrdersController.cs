@@ -18,7 +18,7 @@ namespace CarShopAPI.Controllers
 
         // GET: api/<OrdersController>
         [HttpGet]
-        public ActionResult<List<Order>> GetOrders()
+        public async Task<ActionResult<List<Order>>> GetOrders()
         {
             if (_db.Order == null)
                 return NotFound();
@@ -26,6 +26,8 @@ namespace CarShopAPI.Controllers
             var orders = _db.Order.ToList();
             if (orders.Count == 0)
                 return NotFound();
+
+            await SetItemsToOrders(orders);
 
             return orders;
         }
@@ -40,6 +42,16 @@ namespace CarShopAPI.Controllers
             var order = await _db.Order.FindAsync(id);
             if (order == null)
                 return NotFound();
+
+            order.shopCartItems = _db.ShopCartItem.Where(item => item.OrderId == order.Id).ToList();
+
+            if(order.shopCartItems != null)
+            {
+                foreach (var item in order.shopCartItems)
+                {
+                    item.Car = await _db.Car.Where(car => car.Id == item.CarId).FirstOrDefaultAsync();
+                }
+            }
 
             return order;
         }
@@ -123,6 +135,27 @@ namespace CarShopAPI.Controllers
             {
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        private async Task<List<Order>> SetItemsToOrders(List<Order> orders)
+        {
+            if(orders == null)
+                return new List<Order>();
+
+            foreach (var order in orders)
+            {
+                List<ShopCartItem> items = await _db.ShopCartItem.Where(item => item.OrderId == order.Id).ToListAsync();
+                if(items != null)
+                {
+                    foreach (var item in items)
+                    {
+                        item.Car = await _db.Car.Where(car => car.Id == item.CarId).FirstOrDefaultAsync();
+                    }
+                }
+                order.shopCartItems = items;
+            }
+
+            return orders;
         }
     }
 }

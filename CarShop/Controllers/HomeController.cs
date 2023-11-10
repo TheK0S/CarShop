@@ -63,7 +63,7 @@ namespace CarShop.Controllers
             if (responseOrders.StatusCode != HttpStatusCode.OK)
                 errorMessage += responseOrders.Message ?? $"Error loading orders data. StatusCode: {responseOrders.StatusCode}\n";
 
-            List<Order> orders = responseOrders.Data;
+            List<Order> orders = responseOrders.Data.Where(order => order.UserId == currentUserId).ToList();
 
             PersonalAreaViewModel model = new()
             {

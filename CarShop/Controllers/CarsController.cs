@@ -12,6 +12,7 @@ using CarShop.Interfaces;
 using CarShop.Services;
 using Microsoft.AspNetCore.Routing;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CarShop.Controllers
 {
@@ -30,6 +31,7 @@ namespace CarShop.Controllers
 
 
         // GET: Cars
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Index()
         {
             var response = await _carService.GetCarsAsync();
@@ -37,6 +39,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Details/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -68,6 +71,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -76,6 +80,7 @@ namespace CarShop.Controllers
         // POST: Cars/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,LongDesc,ShortDesc,Title,Url,Price,IsFavourite,Count, CategoryId")] Car car)
@@ -91,6 +96,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,6 +114,7 @@ namespace CarShop.Controllers
         // POST: Cars/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to. [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price,IsFavourite,Count")]
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.  [Bind("Id,Name,ShortDesc,LongDesc,Title,Url,Price,CategoryId")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LongDesc,ShortDesc,Title,Url,Price,IsFavourite,Count, CategoryId")] Car car)
@@ -127,6 +134,7 @@ namespace CarShop.Controllers
         }
 
         // GET: Cars/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,6 +150,7 @@ namespace CarShop.Controllers
         }
 
         // POST: Cars/Delete/5
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id)
@@ -164,7 +173,6 @@ namespace CarShop.Controllers
         }
 
         [HttpPost]
-        //[Route("filter")]
         public async Task<IActionResult> CarFilter([FromBody]CarsFilter filter)
         {
             if (filter == null)
@@ -180,15 +188,15 @@ namespace CarShop.Controllers
 
             foreach (var car in filterredCars)
             {
-                htmlText += $"<div class=\"col-xxl-4 col-lg-6 col-md-12 p-2\">" +
+                htmlText += $"<div class=\"col-xxl-4 col-lg-6 col-md-12 p-2 mt-5\">" +
                         $"<img src = \"{car.Url}\" alt=\"{car.Name}\">" +
-                        $"<div class=\"text-start p-2\">" +
-                            $"<h3 class=\"text-center\">{car.Name}</h3>" +
+                        $"<div class=\"text-center p-2\">" +
+                            $"<h3>{car.Name}</h3>" +
                             $"<p>{car.Title}</p>" +
                             $"<p>{car.ShortDesc}</p>" +
                             $"<p>Price: $ {car.Price}</p>" +
-                            $"<a asp-controller=\"Cars\" asp-action=\"CarDetails\" asp-route-id=\"{car.Id}\" class=\"manageBtn btn btn-info text-center\">More details</a>" +
-                            $"<a asp-controller= \"Cart\" asp-action= \"AddItem\" asp-route-carId= \"{car.Id}\" class=\"manageBtn btn btn-success text-center mx-2\">Bye</a>" +
+                            $"<a href=\"/Cars/CarDetails/{car.Id}\" class=\"manageBtn btn btn-info text-center\">More details</a>" +
+                            $"<a href= \"/Cart/AddItem/?carId={car.Id}\" class=\"manageBtn btn btn-success text-center mx-2\">Bye</a>" +
                         $"</div>" +
                     $"</div>";
             }

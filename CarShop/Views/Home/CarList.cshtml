@@ -3,16 +3,31 @@
     IEnumerable<Category> categories = ViewBag.Categories;
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/carList.css">
+    <link rel="stylesheet" href="/css/carList.css">
 }
+
+<style>
+    .row{
+        max-width:99vw;
+    }
+    .price-wrapper {
+        margin-left: 20px
+    }
+    button{
+        height: 52px;
+
+    }
+    .accordion{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+</style>
 
 <section class="row">
     <div class="carFilter-wrapper col-12">
         <div id="carFilter" class="bg-dark row">
-            <div class="price-wrapper col-sm-12 col-md-4 mb-5">
-                <header>
-                    <h2>Price Range</h2>
-                </header>
+            <div class="price-wrapper col-sm-12 col-md-3 mb-3">
                 <div class="price-input">
                     <div class="field">
                         <span>Min</span>
@@ -32,8 +47,8 @@
                     <input type="range" class="range-max" min="0" max="100000" value="75000" step="100">
                 </div>
             </div>
-            <div class="accordion accordion-flush bg-dark col-sm-12 col-md-4 mb-5" id="accordionFlushExample">
-                <div class="accordion-item bg-dark">
+            <div class="accordion accordion-flush bg-dark col-sm-12 col-md-9 mb-3 row" id="accordionFlushExample">
+                <div class="accordion-item bg-dark col-sm-12 col-md-4">
                     <h2 class="accordion-header bg-dark">
                         <button class="accordion-button collapsed bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                             Category
@@ -44,14 +59,14 @@
                             @foreach (var category in categories)
                             {
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheck" value="@category.Name">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheck" value="@category.Name" checked>
                                     <label class="form-check-label" for="flexSwitchCheck">@category.Name</label>
                                 </div>
                             }
                         </div>
                     </div>
                 </div>
-                <div class="accordion-item">
+                <div class="accordion-item bg-dark col-sm-12 col-md-4">
                     <h2 class="accordion-header bg-dark">
                         <button class="accordion-button collapsed bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                             Favourite
@@ -60,13 +75,13 @@
                     <div id="flush-collapseTwo" class="accordion-collapse collapse bg-dark" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body bg-dark">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheck">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheck">
                                 <label class="form-check-label" for="flexSwitchCheck">Only favourite cars</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button id="updateCarListButton" class="btn btn-primary">Update Car List</button>
+                <button id="updateCarListButton" class="btn btn-primary col-sm-12 col-md-4">Update Car List</button>
             </div>
         </div>
     </div>

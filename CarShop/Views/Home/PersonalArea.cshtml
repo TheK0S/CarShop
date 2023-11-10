@@ -42,9 +42,9 @@
                         for (int i = 0; i < items.Count(); i++)
                         {
                             <div class="row">
-                                <p class="col-2">@i</p>
-                                <a asp-asp-controller="Cars" asp-action="CarDetails" asp-asp-all-route-data="@items[i].CarId.ToString()" class="col-4">
-                                    <b>Name:</b>@items[i].Car?.Name
+                                <p class="col-2">@(i+1)</p>
+                                <a asp-controller="Cars" asp-action="CarDetails" asp-route-id="@items[i].CarId.ToString()" class="col-4">
+                                    <b style="color:white">Name:</b> @items[i].Car?.Name
                                 </a>
                                 <p class="col-3"><b>Price:</b> @items[i].Car?.Price</p>
                                 <p class="col-3"><b>Count:</b> @items[i].Car?.Count</p>

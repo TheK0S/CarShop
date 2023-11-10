@@ -1,8 +1,10 @@
 ﻿using CarShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarShop.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         private HttpClient httpClient = new HttpClient();
