@@ -6,8 +6,6 @@ namespace CarShop.ViewModels
     public class CreateOrderViewModel
     {
         [Required]
-        public int UserId { get; set; }
-        [Required]
         public string? Post { get; set; }
         [Required]
         public string? DeliveryCity { get; set; }

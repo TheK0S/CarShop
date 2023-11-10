@@ -34,6 +34,25 @@
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Account
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a asp-controller="Account" asp-action="Login" class="dropdown-item">Login</a></li>
+                                <li><a asp-controller="Account" asp-action="Register" class="dropdown-item">Register</a></li>
+                                <li><a asp-controller="Account" asp-action="Logout" class="dropdown-item">Logout</a></li>
+                                <li><a asp-controller="Home" asp-action="PersonalArea" class="dropdown-item">Personal area</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
+                                Cart 
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    0
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                     <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

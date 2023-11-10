@@ -14,11 +14,15 @@ namespace CarShop.Controllers
     {
         private readonly IShopCartService _shopCartService;
         private readonly ICarService _carService;
+        private readonly IUserService _userService;
+        private readonly IMessanger _messanger;
 
-        public CartController(IShopCartService shopCartService, ICarService carService)
+        public CartController(IShopCartService shopCartService, ICarService carService, IUserService userService, IMessanger messanger)
         {
             _shopCartService = shopCartService;
             _carService = carService;
+            _userService = userService;
+            _messanger = messanger;
         }
         public async Task<IActionResult> Index()
         {            
@@ -81,6 +85,21 @@ namespace CarShop.Controllers
             bool isOrderCreated = response.Data;
             if (!isOrderCreated)
                 return Problem("Something happened wrong", null, 404);
+
+            int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int currentUserId);
+            var userResponse = await _userService.GetUserAsync(currentUserId);
+            User currentUser = userResponse.Data;
+
+            if (currentUser != null)
+            {
+                string message = $"Dear {currentUser.UserName} your order is created.\n" +
+                    $"Delivery company: {model.Post}.\n" +
+                    $"Delivery address: {model.DeliveryCity}, {model.DeliveryAddress}.\n" +
+                    $"Payment method: {model.PaymentMethod}.\n" +
+                    $"Thank you for choosing our store!";
+
+                _messanger.SendMessage(message, currentUser, "Car shop order");
+            }
 
             return View("OrderCreated");
         }

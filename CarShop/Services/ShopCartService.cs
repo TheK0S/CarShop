@@ -161,7 +161,7 @@ namespace CarShop.Services
             };
 
             HttpContent content = new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync($"{Api.apiUri}", content);
+            var response = await httpClient.PostAsync($"{Api.apiUri}orders", content);
             if(!response.IsSuccessStatusCode)
                 return new BaseResponse<bool> { StatusCode = response.StatusCode, Data = false };
 

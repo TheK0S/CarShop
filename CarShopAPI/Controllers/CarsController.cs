@@ -45,27 +45,30 @@ namespace CarShopAPI.Controllers
             return cars.Where(c => c.IsFavourite == true).ToList() ?? new List<Car>();
         }
 
-        [HttpGet("Filtered")]
-        public async Task<ActionResult<List<Car>>> GetFilteredCars(
-            [FromQuery] int minPrice,
-            [FromQuery] int maxPrice, 
-            [FromQuery] bool isFavourite, 
-            [FromQuery] List<int> categoriesId)
+        [HttpPost("Filtered")]
+        public async Task<ActionResult<List<Car>>> PostFilteredCars(CarsFilter filter)
         {
             if (_db.Car == null)
             {
                 return NotFound();
             }
 
-            IEnumerable<Car> cars = await _db.Car.ToArrayAsync();
+            IEnumerable<Car> cars = _db.Car;
             
-            if(maxPrice > 0)
-                cars = cars.Where(car => car.Price >= minPrice && car.Price <= maxPrice);
+            if(filter.MaxPrice > 0)
+                cars = cars.Where(car => car.Price >= filter.MinPrice && car.Price <= filter.MaxPrice);
 
-            if (categoriesId != null && categoriesId.Count() > 0)
+            if (filter.SelectedCategories != null && filter.SelectedCategories.Count() > 0)
+            {
+                List<int> categoriesId = new List<int>();
+                List<Category> categories = await _db.Category.ToListAsync();
+                foreach (Category category in categories)
+                    categoriesId.Add(category.Id);
+
                 cars = cars.Where(car => categoriesId.Contains(car.CategoryId));
+            }                
 
-            if (isFavourite)
+            if (filter.IsFavourite)
                 cars = cars.Where(car => car.IsFavourite == true);
 
             return cars.ToList();
