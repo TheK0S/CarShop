@@ -1,6 +1,7 @@
 ﻿using Azure;
 using CarShop.Interfaces;
 using CarShop.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
 
@@ -65,7 +66,7 @@ namespace CarShop.Services
 
         public async Task<BaseResponse<List<Car>>> PostFilterredCarsAsync(CarsFilter filter)
         {
-            var response = await httpClient.GetAsync($"{Api.apiUri}cars/filtered");
+            var response = await httpClient.PostAsJsonAsync($"{Api.apiUri}cars/filtered", filter);
             var baseResponse = new BaseResponse<List<Car>>() { StatusCode = response.StatusCode };
 
             try

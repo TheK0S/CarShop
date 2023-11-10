@@ -55,19 +55,23 @@ function updateCarList() {
     }).get();
     var isFavourite = $('#carFilter input[type="checkbox"][name="flexSwitchCheck"]:checked').length > 0;
 
+    var filter = {
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        selectedCategories: selectedCategories,
+        isFavourite: isFavourite
+    };
+
     // Выполняем AJAX-запрос
     $.ajax({
         type: 'POST', // или 'GET', в зависимости от вашего случая
-        url: 'https://localhost:7279/cars/filter',
-        data: {
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            selectedCategories: selectedCategories,
-            isFavourite: isFavourite
-        },
+        url: 'https://localhost:7279/cars/carFilter',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(filter),
         success: function (response) {
             // Обновляем список машин на странице
             $('#carField').html(response);
+            console.log(response)
         },
         error: function (error) {
             console.log(error);

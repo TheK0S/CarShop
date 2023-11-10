@@ -163,9 +163,9 @@ namespace CarShop.Controllers
             return StatusCode((int)delResponse.StatusCode, delResponse.Message);
         }
 
-        [HttpPost("filter")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CarFilter(CarsFilter filter)
+        [HttpPost]
+        //[Route("filter")]
+        public async Task<IActionResult> CarFilter([FromBody]CarsFilter filter)
         {
             if (filter == null)
                 return NotFound();
@@ -180,8 +180,7 @@ namespace CarShop.Controllers
 
             foreach (var car in filterredCars)
             {
-                htmlText += $"" +
-                    $"< div class=\"col-xxl-4 col-lg-6 col-md-12 p-2\">" +
+                htmlText += $"<div class=\"col-xxl-4 col-lg-6 col-md-12 p-2\">" +
                         $"<img src = \"{car.Url}\" alt=\"{car.Name}\">" +
                         $"<div class=\"text-start p-2\">" +
                             $"<h3 class=\"text-center\">{car.Name}</h3>" +
@@ -189,7 +188,7 @@ namespace CarShop.Controllers
                             $"<p>{car.ShortDesc}</p>" +
                             $"<p>Price: $ {car.Price}</p>" +
                             $"<a asp-controller=\"Cars\" asp-action=\"CarDetails\" asp-route-id=\"{car.Id}\" class=\"manageBtn btn btn-info text-center\">More details</a>" +
-                            $"<a asp-controller= \"Cart\" asp-action= \"AddItem\" asp-route-carId= \"{car.Id}\" class=\"manageBtn btn btn-success text-center\">Bye</a>" +
+                            $"<a asp-controller= \"Cart\" asp-action= \"AddItem\" asp-route-carId= \"{car.Id}\" class=\"manageBtn btn btn-success text-center mx-2\">Bye</a>" +
                         $"</div>" +
                     $"</div>";
             }

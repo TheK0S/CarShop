@@ -49,9 +49,7 @@ namespace CarShopAPI.Controllers
         public async Task<ActionResult<List<Car>>> PostFilteredCars(CarsFilter filter)
         {
             if (_db.Car == null)
-            {
                 return NotFound();
-            }
 
             IEnumerable<Car> cars = _db.Car;
             
@@ -61,7 +59,7 @@ namespace CarShopAPI.Controllers
             if (filter.SelectedCategories != null && filter.SelectedCategories.Count() > 0)
             {
                 List<int> categoriesId = new List<int>();
-                List<Category> categories = await _db.Category.ToListAsync();
+                List<Category> categories = await _db.Category.Where(category => filter.SelectedCategories.Contains(category.Name)).ToListAsync();
                 foreach (Category category in categories)
                     categoriesId.Add(category.Id);
 
