@@ -65,7 +65,8 @@ function updateCarList() {
     // Выполняем AJAX-запрос
     $.ajax({
         type: 'POST', // или 'GET', в зависимости от вашего случая
-        url: 'https://localhost:7279/cars/carFilter',
+        url: 'http://carsshop.somee.com/cars/carFilter',
+        //url: 'https://localhost:7279/cars/carFilter',
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(filter),
         success: function (response) {

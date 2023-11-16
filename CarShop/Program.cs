@@ -26,7 +26,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 
 builder.Configuration.AddUserSecrets("3c88f461-1a0d-4ce6-a501-dac8ad8dae28");
-builder.Configuration.AddJsonFile("appsettings.json");
+builder.Configuration.AddJsonFile("Configuration/appsettings.json");
 
 builder.Services.AddMessanger(builder.Configuration);
 builder.Services.AddTransient<IUserService, UserService>();
